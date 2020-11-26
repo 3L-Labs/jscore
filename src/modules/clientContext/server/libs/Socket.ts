@@ -1,7 +1,5 @@
-import sock from "../../../../../sockjs-client";
+//import sock from "../../../../../sockjs-client";
 import { SpringBootOpts } from "../integrations/SpringBoot";
-const Stomp = require("@stomp/stompjs/bundles/stomp.umd")
-import { Client } from "@stomp/stompjs/esm6";
 
 export enum SOCKET {
   CONNECT = "CONNECT",
@@ -24,7 +22,7 @@ export interface MessageData {
 }
 
 export default class Socket {
-  private sock : Client;
+  private sock : any;
   private header;
 
   constructor(private opts : SpringBootOpts, private token : string) {
@@ -32,6 +30,8 @@ export default class Socket {
   }
 
   public async setup() {
+
+    /*
     if (!this.token) {
         //FIXME: actually handle errors
         return;
@@ -66,7 +66,7 @@ export default class Socket {
         resolve(); //FIXME: actually handle errors
         //reject();
       }
-    });
+    });*/
 
   }
 

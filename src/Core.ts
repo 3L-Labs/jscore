@@ -2,10 +2,16 @@
 import { reaction } from "mobx";
 import mitt from "mitt";
 
+/**
+ * Modules 
+ */
 import MapConfig from "./modules/Map.config";
 import Module from "./modules/Module";
 import ModuleManager from "./modules/ModuleManager";
 
+/**
+ * Constants
+ */
 import ConstantsManager from "./constants/ConstantsManager";
 import { AppConfig } from "./constants/AppConfig";
 import { AuthenticationState } from "./constants/Authentication";
