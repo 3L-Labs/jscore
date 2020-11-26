@@ -75,6 +75,8 @@ export default class Core<T> {
      * @param dependencyInjection 
      */
     public async start(dependencyInjection? : any) {
+
+      //default in case its loaded with require
       const requestedModules = this.config.modules;
 
       //Check our dependencies across our modules
@@ -111,7 +113,10 @@ export default class Core<T> {
           const Module = MapConfig[moduleName];
 
           //grab any injected dependencies
-          const dependencies = dependencyInjection[moduleName];
+          let dependencies;
+          if (dependencyInjection) {
+            dependencies = dependencyInjection[moduleName];
+          }
           
           //Initialize the module and add to core
           Module.init(this, moduleName, moduleConfig, dependencies);
