@@ -52,7 +52,7 @@ interface DependencyInjection {
 
 export default class ClientContext extends Module {
 
-  public auth : Cognito;
+  public auth : Cognito | undefined;
   public home : SpringBoot;
 
   constructor(core : Core<{}>, private config : Config, private dependencyInjection: DependencyInjection) {
@@ -89,7 +89,7 @@ export default class ClientContext extends Module {
   }
 
   async logout() {
-      this.auth.signOut();
+      this.auth?.signOut();
       this.auth = undefined;
       this.Core.Constants.authentication.update(AuthenticationState.failed);
       this.start();
@@ -100,7 +100,11 @@ export default class ClientContext extends Module {
    */
   private async setupHomeConnection() {
 
-    let home : ServerConfig = this.config.server.find(config => config.home);
+    let home : ServerConfig | undefined = this.config.server.find(config => config.home);
+
+    if (!home) {
+        return;
+    }
     
     if (home.type === ServerType.Feathers) {
 

@@ -15,6 +15,7 @@
         "skipLibCheck": true,
         "moduleResolution":"node",
         "allowSyntheticDefaultImports" : true,
+        "strictNullChecks": true
     },
     "include": [
         "src/**/*" 

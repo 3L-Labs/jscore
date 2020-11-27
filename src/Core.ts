@@ -56,7 +56,7 @@ export default class Core<T> {
           if (arg === AuthenticationState.success) {
             await (this.Modules.ClientContext as any).start();
             await this.resetStores();
-            (this.Modules.AppManager.lifecycle as any).initCallbacks.forEach(i => i());
+            (this.Modules.AppManager?.lifecycle as any).initCallbacks.forEach(i => i());
 
           }
         }
@@ -104,8 +104,8 @@ export default class Core<T> {
 
 
         //load and start all of our modules
-        const loadedModules = [];
-        const errors = []
+        const loadedModules: Array<Promise<void>> = [];
+        const errors: Array<any> = []
         Array.from(Object.keys(requestedModules)).forEach((moduleName) => {
 
           //Get the module from the map

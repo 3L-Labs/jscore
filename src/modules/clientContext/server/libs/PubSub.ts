@@ -40,6 +40,11 @@ export default class PubSub {
       throw new Error("Max number of sse connections being used!");
     }
 
+    if (!path) {
+        throw new Error("Path not provided")
+        return;
+    }
+
     let es = new SSE();
     await es.newSource(path);
     this.numberOfSSEConnections++;

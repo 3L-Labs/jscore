@@ -67,7 +67,7 @@ export default class ExpoNotification extends NotificationClass {
 
   protected async updateToken() {
     const token = await this.getToken();
-    this.Core.Modules.ClientContext.home.http.post(this.config.mobile.pushTokenEndpoint, {
+    this.Core.Modules.ClientContext?.home.http.post(this.config.mobile.pushTokenEndpoint, {
         token : token
     });
   }
