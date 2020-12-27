@@ -1,4 +1,7 @@
 import Core, { jscore } from "./Core";
 
-export { jscore }
+import { comm } from "./modules/comm/Comm";
+import CSComm from "./modules/comm/slots";
+
+export { jscore, CSComm, comm }
 export default Core;

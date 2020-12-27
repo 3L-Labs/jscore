@@ -1,5 +1,5 @@
 
-import { reaction } from "mobx";
+import { reaction, observable, action, getObserverTree } from "mobx";
 import mitt from "mitt";
 
 /**
@@ -15,11 +15,12 @@ import ModuleManager from "./modules/ModuleManager";
 import ConstantsManager from "./constants/ConstantsManager";
 import { AppConfig } from "./constants/AppConfig";
 import { AuthenticationState } from "./constants/Authentication";
+import { makeAutoObservable } from "mobx";
 
 export let CoreConstants: ConstantsManager;
 export let CoreEmit: any = (mitt as any)();
 
-export default class Core<T> { 
+export default class Core<T={}> { 
 
     public Constants: ConstantsManager;
     public Modules: ModuleManager = {};
@@ -28,13 +29,24 @@ export default class Core<T> {
     private delayedInit : any = [];
     private started: boolean = false;
 
+    @observable public testValue : number = 2;
+    @observable public testValue1 : number = 3;
+
     constructor(private config : AppConfig) {
+      makeAutoObservable(this);
 
       this.Constants = new ConstantsManager();
       CoreConstants = this.Constants
       this.addConstantListeners();
 
       console.log("# jscore config : ", config);
+      //getObserverTree(() => this)
+
+    }
+
+    @action
+    public incrementTestValue(){
+      this.testValue++;
     }
 
     /*************************
@@ -74,7 +86,7 @@ export default class Core<T> {
      *  
      * @param dependencyInjection 
      */
-    public async start(dependencyInjection? : any) {
+    public async start(dependencyInjection? : any): Promise<Core<T>> {
 
       //default in case its loaded with require
       const requestedModules = this.config.modules;
@@ -149,6 +161,8 @@ export default class Core<T> {
       } catch (e) {
           throw e;
       }
+
+      return this;
     }
 
     /**
@@ -183,6 +197,9 @@ export default class Core<T> {
      *************************/
 
     private async startStores(){
+      if (this.config.child) {
+        throw new Error("Jscore children should not contain stores!");
+      }
       //start our stores or any injected class (classes that are using the @jscore)
       (Core as any).storeInjections.forEach((inject : any) => {
           if (inject.name) {
