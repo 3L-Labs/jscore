@@ -5,11 +5,9 @@ import Log from "./log/Log";
 import Comm from "./comm/Comm";
 
 export default class ModuleManager {
-
     public AppManager?: AppManager;
     public ClientContext?: ClientContext;
     public Notification?: Notification;
     public Log?: Log;
     public Comm?: Comm;
-
 }

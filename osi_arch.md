@@ -1,13 +1,7 @@
-
-
-
-
-## Front-end Architecture
-
 ### Structure 
 
 1. jscore
-    /modules
+    /modules - Load at build time
         appManager
         clientContext
         log
@@ -24,7 +18,7 @@
         Store
     /stores
         *Added at runtime 
-2. builds
+2. osi-builds
     /config
         App.config
         Module.config

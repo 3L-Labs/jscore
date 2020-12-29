@@ -1,4 +1,4 @@
-import ConstantState from "./ConstantState";
+import Constant from "./Constant";
 
 export enum PlatformState { 
   Web,
@@ -6,9 +6,8 @@ export enum PlatformState {
   Node
 }
 
-export default class Platform extends ConstantState {
+export default class Platform extends Constant<PlatformState> {
     public state : PlatformState;
-
     constructor(){
         super();
         if (typeof document != 'undefined') {
@@ -20,5 +19,5 @@ export default class Platform extends ConstantState {
         }
     }
 
-    public update(){};
+    public update(){}; //
 }

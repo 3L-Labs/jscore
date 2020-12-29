@@ -1,6 +1,5 @@
 
-import { reaction, observable, action, getObserverTree } from "mobx";
-import mitt from "mitt";
+import { reaction, observable, action } from "mobx";
 
 /**
  * Modules 
@@ -16,9 +15,7 @@ import ConstantsManager from "./constants/ConstantsManager";
 import { AppConfig } from "./constants/AppConfig";
 import { AuthenticationState } from "./constants/Authentication";
 import { makeAutoObservable } from "mobx";
-
 export let CoreConstants: ConstantsManager;
-export let CoreEmit: any = (mitt as any)();
 
 export default class Core<T={}> { 
 
@@ -29,9 +26,6 @@ export default class Core<T={}> {
     private delayedInit : any = [];
     private started: boolean = false;
 
-    @observable public testValue : number = 2;
-    @observable public testValue1 : number = 3;
-
     constructor(private config : AppConfig) {
       makeAutoObservable(this);
 
@@ -40,17 +34,10 @@ export default class Core<T={}> {
       this.addConstantListeners();
 
       console.log("# jscore config : ", config);
-      //getObserverTree(() => this)
-
-    }
-
-    @action
-    public incrementTestValue(){
-      this.testValue++;
     }
 
     /*************************
-     * Jscore Constant Watchers
+     * Jscore Constant Reactors
      *************************/
 
     private addConstantListeners(){
