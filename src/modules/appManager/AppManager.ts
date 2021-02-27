@@ -19,9 +19,9 @@ export default class AppManager extends Module {
     constructor(Core : Core<{}>, private config : Config, private dependencyInjection : DependencyInjection){
       super(Core);
 
-      if (this.Core.Constants.platform.state === PlatformState.Mobile) {
+      if (this.Core.Constants.Platform.state === PlatformState.Mobile) {
           this.lifecycle = new MobileLifecycle(dependencyInjection);
-      } else if (this.Core.Constants.platform.state === PlatformState.Web) {
+      } else if (this.Core.Constants.Platform.state === PlatformState.Web) {
           this.lifecycle = new WebLifecycle();
       }
 

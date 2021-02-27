@@ -1,5 +1,6 @@
 
-import { reaction, observable, action } from "mobx";
+import { reaction, observable } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 /**
  * Modules 
@@ -14,17 +15,18 @@ import ModuleManager from "./modules/ModuleManager";
 import ConstantsManager from "./constants/ConstantsManager";
 import { AppConfig } from "./constants/AppConfig";
 import { AuthenticationState } from "./constants/Authentication";
-import { makeAutoObservable } from "mobx";
 export let CoreConstants: ConstantsManager;
 
-export default class Core<T={}> { 
+export default class Core<T=any> { 
 
     public Constants: ConstantsManager;
     public Modules: ModuleManager = {};
     public Stores: T = {} as T;
 
+    @observable public test =1;
+
     private delayedInit : any = [];
-    private started: boolean = false;
+    public started: boolean = false;
 
     constructor(private config : AppConfig) {
       makeAutoObservable(this);
@@ -34,6 +36,11 @@ export default class Core<T={}> {
       this.addConstantListeners();
 
       console.log("# jscore config : ", config);
+    }
+
+    public inc(){
+        console.log("incrementing!!")
+        this.test++;
     }
 
     /*************************
@@ -46,13 +53,13 @@ export default class Core<T={}> {
 
     private async onAuthChanged(){
       reaction(
-        () => this.Constants.authentication.state,
+        () => this.Constants.Authentication.state,
         async (arg: AuthenticationState) => {
           if (!this.started){
             return; 
           }
 
-          if (arg === AuthenticationState.success) {
+          if (arg === AuthenticationState.SUCCESS) {
             await (this.Modules.ClientContext as any).start();
             await this.resetStores();
             (this.Modules.AppManager?.lifecycle as any).initCallbacks.forEach(i => i());
@@ -187,6 +194,9 @@ export default class Core<T={}> {
       if (this.config.child) {
         throw new Error("Jscore children should not contain stores!");
       }
+
+      console.log("starting stores!!", (Core as any).storeInjections);
+
       //start our stores or any injected class (classes that are using the @jscore)
       (Core as any).storeInjections.forEach((inject : any) => {
           if (inject.name) {
@@ -231,8 +241,11 @@ export default class Core<T={}> {
  */
 (Core as any).storeInjections = [];
 (Core as any).libInjections = [];
-export const jscore = {
+console.log("bringing in jscore")
+
+const jscore = {
   store : function (name : string){
+      console.log("adding store to jscore")
     return (constructor) => {
         (Core as any).storeInjections.push({
             constructor : constructor,
@@ -249,3 +262,6 @@ export const jscore = {
     }
   },
 }
+globalThis.jscore = jscore;
+
+export { jscore }

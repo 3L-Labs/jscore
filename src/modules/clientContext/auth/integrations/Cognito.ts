@@ -28,7 +28,7 @@ export default class Cognito extends Auth {
             userPoolWebClientId: cognitoConfig.APP_CLIENT_ID,
         }
 
-        if (CoreConstants.platform.state === PlatformState.Web) {
+        if (CoreConstants.Platform.state === PlatformState.Web) {
             amplifyAuthConfig = {...amplifyAuthConfig, ...{
                 cookieStorage: {
                 // REQUIRED - Cookie domain (only required if cookieStorage is provided)
@@ -58,7 +58,7 @@ export default class Cognito extends Auth {
         this.accessToken = tokens.getAccessToken().getJwtToken();
         this.refreshToken = tokens.getRefreshToken().getToken();
 
-        this.updateAuthState(AuthenticationState.success, response, response.username);
+        this.updateAuthState(AuthenticationState.SUCCESS, response, response.username);
     }
 
     public async signIn(email: string, password: string) {
@@ -69,10 +69,10 @@ export default class Cognito extends Auth {
             this.accessToken = tokens.getAccessToken().getJwtToken();
             this.refreshToken = tokens.getRefreshToken().getToken();
 
-            this.updateAuthState(AuthenticationState.success, response, email);
+            this.updateAuthState(AuthenticationState.SUCCESS, response, email);
 		} catch (e) {
             console.log("Auth sign in error : ", e);
-            this.updateAuthState(AuthenticationState.failed);
+            this.updateAuthState(AuthenticationState.ERROR);
             throw e;
         }
         
@@ -84,10 +84,10 @@ export default class Cognito extends Auth {
 				username: email,
 				password: password
             });
-            this.updateAuthState(AuthenticationState.emailConfirmation, undefined, email);
+            this.updateAuthState(AuthenticationState.EMAIL_CONFIRMATION, undefined, email);
 		} catch (e) {
             console.log("Auth sign up error : ", e)
-            this.updateAuthState(AuthenticationState.failed);
+            this.updateAuthState(AuthenticationState.ERROR);
             throw e;
 		}
     }
@@ -95,16 +95,16 @@ export default class Cognito extends Auth {
     public async confirmSignUp(email: string, confirmationCode: string) {
         try {
 			const response = await this._auth.confirmSignUp(email, confirmationCode)
-            this.updateAuthState(AuthenticationState.success, response, email);
+            this.updateAuthState(AuthenticationState.SUCCESS, response, email);
 		} catch (e) {
             console.log("Auth confrim error : ", e)
-            this.updateAuthState(AuthenticationState.emailConfirmationFailed);
+            this.updateAuthState(AuthenticationState.EMAIL_CONFIRMATION_FAILED);
             throw e;
 		}
     }
 
     public async resendSignUpConfirmation(username: string) {
-        this.updateAuthState(AuthenticationState.emailConfirmation, undefined, username);
+        this.updateAuthState(AuthenticationState.EMAIL_CONFIRMATION, undefined, username);
         try {
             await this._auth.resendSignUp(username);
         } catch (e) {

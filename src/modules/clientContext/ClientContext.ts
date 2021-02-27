@@ -77,12 +77,12 @@ export default class ClientContext extends Module {
         break;
 
       case AuthType.Cognito :
-        this.auth = new Cognito(this.Core.Constants.authentication.update.bind(this.Core.Constants.authentication), this.config.auth.config, this.dependencyInjection.AmazonCognito);
+        this.auth = new Cognito(this.Core.Constants.Authentication.update.bind(this.Core.Constants.Authentication), this.config.auth.config, this.dependencyInjection.AmazonCognito);
         await (this.auth as any).checkLocalAuth();
         break;
 
       case AuthType.None : 
-        this.Core.Constants.authentication.update(AuthenticationState.success)
+        this.Core.Constants.Authentication.update(AuthenticationState.SUCCESS)
         break;
     }
 
@@ -91,7 +91,7 @@ export default class ClientContext extends Module {
   async logout() {
       this.auth?.signOut();
       this.auth = undefined;
-      this.Core.Constants.authentication.update(AuthenticationState.failed);
+      this.Core.Constants.Authentication.update(AuthenticationState.ERROR);
       this.start();
   }
 

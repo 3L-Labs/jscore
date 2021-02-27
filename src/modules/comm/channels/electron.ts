@@ -1,5 +1,8 @@
 import { GenericChannel } from 'ts-event-bus'
 
+export class Electron {}
+
+/*
 export class Electron extends GenericChannel {
     private _ws: WebSocket | null = null
     private _host: string
@@ -39,4 +42,4 @@ export class Electron extends GenericChannel {
             this._messageReceived(e.data)
         }
     }
-}
+}*/
