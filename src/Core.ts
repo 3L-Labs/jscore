@@ -17,11 +17,22 @@ import { AppConfig } from "./constants/AppConfig";
 import { AuthenticationState } from "./constants/Authentication";
 export let CoreConstants: ConstantsManager;
 
+let mainCore: Core;
+
+let _ = {
+    get m(): Core {
+        return mainCore
+    }
+};
+
+export { _ };
+
 export default class Core<T=any> { 
 
     public Constants: ConstantsManager;
     public Modules: ModuleManager = {};
     public Stores: T = {} as T;
+    public libs: T = {} as T;
 
     @observable public test =1;
 
@@ -29,6 +40,7 @@ export default class Core<T=any> {
     public started: boolean = false;
 
     constructor(private config : AppConfig) {
+      mainCore = this;
       makeAutoObservable(this);
 
       this.Constants = new ConstantsManager();
@@ -195,8 +207,6 @@ export default class Core<T=any> {
         throw new Error("Jscore children should not contain stores!");
       }
 
-      console.log("starting stores!!", (Core as any).storeInjections);
-
       //start our stores or any injected class (classes that are using the @jscore)
       (Core as any).storeInjections.forEach((inject : any) => {
           if (inject.name) {
@@ -207,6 +217,7 @@ export default class Core<T=any> {
             this.Stores[inject.constructor.name]._();
           }
       })
+
     }
 
     private async resetStores(){
@@ -220,12 +231,13 @@ export default class Core<T=any> {
      *************************/
 
     private async startLibs(){
+
       //start our stores or any injected class (classes that are using the @jscore)
       (Core as any).libInjections.forEach((inject : any) => {
           if (inject.name) {
-              this.Stores[inject.name] = new inject.constructor(this)
+              this.libs[inject.name] = new inject.constructor(this)
           } else {
-              this.Stores[inject.constructor.name] = new inject.constructor(this);
+              this.libs[inject.constructor.name] = new inject.constructor(this);
           }
       })
     }
@@ -241,11 +253,9 @@ export default class Core<T=any> {
  */
 (Core as any).storeInjections = [];
 (Core as any).libInjections = [];
-console.log("bringing in jscore")
 
 const jscore = {
   store : function (name : string){
-      console.log("adding store to jscore")
     return (constructor) => {
         (Core as any).storeInjections.push({
             constructor : constructor,
