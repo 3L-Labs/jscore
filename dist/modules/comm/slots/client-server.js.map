@@ -1,0 +1,1 @@
+{"version":3,"file":"client-server.js","sourceRoot":"","sources":["../../../../src/modules/comm/slots/client-server.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,IAAI,EAAE,MAAM,cAAc,CAAA;AAYnC,MAAM,MAAM,GAAG;IACX,GAAG,EAAE,IAAI,EAA0B;IACnC,GAAG,EAAE,IAAI,EAAkB;IAC3B,UAAU,EAAE,IAAI,EAAU;CAC7B,CAAA;AAED,eAAe,MAAM,CAAC"}
