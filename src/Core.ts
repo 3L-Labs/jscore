@@ -1,5 +1,5 @@
 
-import { reaction, observable } from "mobx";
+import { reaction, observable, makeObservable } from "mobx";
 import { makeAutoObservable } from "mobx";
 
 /**
@@ -20,24 +20,23 @@ export let CoreConstants: ConstantsManager;
 let mainCore: Core;
 
 let _ = {
-    get m(): Core {
+    m<T=any,L=any>(): Core<T,L> {
         return mainCore
     }
 };
 
 export { _ };
 
-export default class Core<T=any> { 
+export default class Core<T=any,L=any> { 
 
-    public Constants: ConstantsManager;
-    public Modules: ModuleManager = {};
-    public Stores: T = {} as T;
-    public libs: T = {} as T;
-
-    @observable public test =1;
+    @observable public Constants: ConstantsManager;
+    @observable public Modules: ModuleManager = {};
+    @observable public Stores: T = {} as T;
+    public libs: L = {} as L;
 
     private delayedInit : any = [];
     public started: boolean = false;
+    public updated: number = 0;
 
     constructor(private config : AppConfig) {
       mainCore = this;
@@ -48,11 +47,6 @@ export default class Core<T=any> {
       this.addConstantListeners();
 
       console.log("# jscore config : ", config);
-    }
-
-    public inc(){
-        console.log("incrementing!!")
-        this.test++;
     }
 
     /*************************
@@ -207,14 +201,17 @@ export default class Core<T=any> {
         throw new Error("Jscore children should not contain stores!");
       }
 
+      const stores: T = {} as T;
+
       //start our stores or any injected class (classes that are using the @jscore)
       (Core as any).storeInjections.forEach((inject : any) => {
+          console.log("inject: ", inject);
           if (inject.name) {
-              this.Stores[inject.name] = new inject.constructor(this)
+              this.Stores[inject.name] = new inject.constructor(this);
               this.Stores[inject.name]._();
           } else {
               this.Stores[inject.constructor.name] = new inject.constructor(this);
-            this.Stores[inject.constructor.name]._();
+              this.Stores[inject.constructor.name]._();
           }
       })
 

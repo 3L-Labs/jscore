@@ -1,6 +1,7 @@
 import Core from "../Core";
 export default class Store {
     protected Core: Core<any>;
+    isLoading: boolean;
     private isRendered;
     private initCallbacks;
     private foregroundCallbacks;
@@ -8,7 +9,6 @@ export default class Store {
     protected http: any;
     protected pubsub: any;
     constructor(Core: Core<any>, children?: any[]);
-    _(): void;
     protected createStore(Store: any, ...args: any[]): any;
     protected connectionObjects(): void;
     protected onRender(): void;

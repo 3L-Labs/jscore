@@ -1,9 +1,10 @@
 
 import Core from "../Core";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, makeObservable, observable } from "mobx";
 
 export default class Store {
 
+    @observable public isLoading: boolean = false;
     private isRendered : boolean = false;
 
     private initCallbacks : Array<any> = new Array<any>();
@@ -15,8 +16,6 @@ export default class Store {
     protected pubsub : any;
 
     constructor(protected Core : Core<any>, children? : any[]) {
-        //makeAutoObservable(this);
-
         if (children)
             children.forEach(c => {
                 this[c.name] = new c(Core)
@@ -47,15 +46,13 @@ export default class Store {
         this.background(background(), true);
     }
 
-    _(){}
-
     protected createStore(Store, ...args){
         const c = new Store(this.Core, ...args)
         return c;
     }
 
     protected connectionObjects(){
-      //this.http = this.Core.Modules.ClientContext.home.http;
+      ///this.http = this.Core.Modules.ClientContext.home.http;
       //this.pubsub = this.Core.Modules.ClientContext.home.pubsub;
     }
 

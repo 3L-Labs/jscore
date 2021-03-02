@@ -3,20 +3,19 @@ import ConstantsManager from "./constants/ConstantsManager";
 import { AppConfig } from "./constants/AppConfig";
 export declare let CoreConstants: ConstantsManager;
 declare let _: {
-    readonly m: Core<any>;
+    m<T = any, L = any>(): Core<T, L>;
 };
 export { _ };
-export default class Core<T = any> {
+export default class Core<T = any, L = any> {
     private config;
     Constants: ConstantsManager;
     Modules: ModuleManager;
     Stores: T;
-    libs: T;
-    test: number;
+    libs: L;
     private delayedInit;
     started: boolean;
+    updated: number;
     constructor(config: AppConfig);
-    inc(): void;
     private addConstantListeners;
     private onAuthChanged;
     start(dependencyInjection?: any): Promise<Core<T>>;

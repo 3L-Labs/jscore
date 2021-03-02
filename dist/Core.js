@@ -21,7 +21,7 @@ import { AuthenticationState } from "./constants/Authentication";
 export let CoreConstants;
 let mainCore;
 let _ = {
-    get m() {
+    m() {
         return mainCore;
     }
 };
@@ -32,19 +32,15 @@ export default class Core {
         this.Modules = {};
         this.Stores = {};
         this.libs = {};
-        this.test = 1;
         this.delayedInit = [];
         this.started = false;
+        this.updated = 0;
         mainCore = this;
         makeAutoObservable(this);
         this.Constants = new ConstantsManager();
         CoreConstants = this.Constants;
         this.addConstantListeners();
         console.log("# jscore config : ", config);
-    }
-    inc() {
-        console.log("incrementing!!");
-        this.test++;
     }
     addConstantListeners() {
         this.onAuthChanged();
@@ -146,7 +142,9 @@ export default class Core {
             if (this.config.child) {
                 throw new Error("Jscore children should not contain stores!");
             }
+            const stores = {};
             Core.storeInjections.forEach((inject) => {
+                console.log("inject: ", inject);
                 if (inject.name) {
                     this.Stores[inject.name] = new inject.constructor(this);
                     this.Stores[inject.name]._();
@@ -185,7 +183,13 @@ export default class Core {
 }
 __decorate([
     observable
-], Core.prototype, "test", void 0);
+], Core.prototype, "Constants", void 0);
+__decorate([
+    observable
+], Core.prototype, "Modules", void 0);
+__decorate([
+    observable
+], Core.prototype, "Stores", void 0);
 Core.storeInjections = [];
 Core.libInjections = [];
 const jscore = {

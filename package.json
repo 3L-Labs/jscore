@@ -1,5 +1,5 @@
 {
-  "name": "@3l-labs/jscore",
+  "name": "@3L-Labs/jscore",
   "version": "0.2.3",
   "description": "Frontend backbone.",
   "main": "dist/index.js",
