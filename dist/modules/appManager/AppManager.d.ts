@@ -11,7 +11,7 @@ export default class AppManager extends Module {
     private config;
     private dependencyInjection;
     lifecycle: Lifecycle;
-    constructor(Core: Core<{}>, config: Config, dependencyInjection: DependencyInjection);
+    constructor(core: Core<{}>, config: Config, dependencyInjection: DependencyInjection);
     protected postStart(): Promise<void>;
     protected restart(): Promise<void>;
 }

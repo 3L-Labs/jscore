@@ -1,5 +1,5 @@
 import Auth from "../Auth";
-import { CoreConstants } from "../../../../Core";
+import { coreConstants } from "../../../../Core";
 import { PlatformState } from "../../../../constants/Platform";
 import { AuthenticationState } from "../../../../constants/Authentication";
 
@@ -28,7 +28,7 @@ export default class Cognito extends Auth {
             userPoolWebClientId: cognitoConfig.APP_CLIENT_ID,
         }
 
-        if (CoreConstants.Platform.state === PlatformState.Web) {
+        if (coreConstants.platform.state === PlatformState.Web) {
             amplifyAuthConfig = {...amplifyAuthConfig, ...{
                 cookieStorage: {
                 // REQUIRED - Cookie domain (only required if cookieStorage is provided)
@@ -50,7 +50,7 @@ export default class Cognito extends Auth {
 
     }
 
-    protected async checkLocalAuth(){
+    public async checkLocalAuth(){
         const response = await this._auth.currentAuthenticatedUser()
 
         const tokens = await this._auth.currentSession()

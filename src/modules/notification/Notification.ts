@@ -28,11 +28,11 @@ export default class Notification extends Module {
     switch (PlatformState[this.config.platform]) {
 
       case PlatformState.Web :
-        this.notify = new WebNotification(this.Core, this.config);
+        this.notify = new WebNotification(this.core, this.config);
         break;
       
       case PlatformState.Mobile :
-        this.notify = new ExpoNotification(this.Core, this.config, this.dependencyInjection);
+        this.notify = new ExpoNotification(this.core, this.config, this.dependencyInjection);
         break;
 
       default :

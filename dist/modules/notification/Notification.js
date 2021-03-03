@@ -21,10 +21,10 @@ export default class Notification extends Module {
         return __awaiter(this, void 0, void 0, function* () {
             switch (PlatformState[this.config.platform]) {
                 case PlatformState.Web:
-                    this.notify = new WebNotification(this.Core, this.config);
+                    this.notify = new WebNotification(this.core, this.config);
                     break;
                 case PlatformState.Mobile:
-                    this.notify = new ExpoNotification(this.Core, this.config, this.dependencyInjection);
+                    this.notify = new ExpoNotification(this.core, this.config, this.dependencyInjection);
                     break;
                 default:
                     console.error("Not supported platform passed to Notification Module!");

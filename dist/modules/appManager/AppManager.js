@@ -12,14 +12,14 @@ import WebLifecycle from "./platforms/Web";
 import Module from "../Module";
 import { PlatformState } from "../../constants/Platform";
 export default class AppManager extends Module {
-    constructor(Core, config, dependencyInjection) {
-        super(Core);
+    constructor(core, config, dependencyInjection) {
+        super(core);
         this.config = config;
         this.dependencyInjection = dependencyInjection;
-        if (this.Core.Constants.Platform.state === PlatformState.Mobile) {
+        if (this.core.constants.platform.state === PlatformState.Mobile) {
             this.lifecycle = new MobileLifecycle(dependencyInjection);
         }
-        else if (this.Core.Constants.Platform.state === PlatformState.Web) {
+        else if (this.core.constants.platform.state === PlatformState.Web) {
             this.lifecycle = new WebLifecycle();
         }
     }

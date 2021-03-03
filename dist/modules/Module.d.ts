@@ -8,9 +8,9 @@ export interface ModuleConfig {
     dependencies: Dependencies;
 }
 export default class Module {
-    protected Core: Core<{}>;
-    constructor(Core: Core<{}>);
-    static init(Core: Core<{}>, name: any, config: any, dependencies: any): Promise<void>;
+    protected core: Core<{}>;
+    constructor(core: Core<{}>);
+    static init(core: Core<{}>, name: any, config: any, dependencies: any): Promise<void>;
     protected start(): Promise<void>;
     protected postStart(): Promise<void>;
     protected restart(): Promise<void>;

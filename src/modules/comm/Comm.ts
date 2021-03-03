@@ -29,7 +29,7 @@ export default class Comm extends Module {
 
     async start(){
         if (this.config.client_server) {
-            ClientServerInit(this.Core, comm);
+            ClientServerInit(this.core, comm);
         }
     }
 }

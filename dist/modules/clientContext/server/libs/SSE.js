@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-export class SSE {
+export default class SSE {
     constructor() { }
     newSource(sourcePath) {
         return __awaiter(this, void 0, void 0, function* () {

@@ -1,16 +1,16 @@
 import ModuleManager from "./modules/ModuleManager";
 import ConstantsManager from "./constants/ConstantsManager";
 import { AppConfig } from "./constants/AppConfig";
-export declare let CoreConstants: ConstantsManager;
+export declare let coreConstants: ConstantsManager;
 declare let _: {
     m<T = any, L = any>(): Core<T, L>;
 };
 export { _ };
 export default class Core<T = any, L = any> {
     private config;
-    Constants: ConstantsManager;
+    constants: ConstantsManager;
     Modules: ModuleManager;
-    Stores: T;
+    stores: T;
     libs: L;
     private delayedInit;
     started: boolean;

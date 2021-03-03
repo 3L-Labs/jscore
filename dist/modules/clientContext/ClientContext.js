@@ -51,14 +51,15 @@ export default class ClientContext extends Module {
         return __awaiter(this, void 0, void 0, function* () {
             switch (this.config.auth.type) {
                 case AuthType.Chain:
-                    console.log("ClientContext : Using chain for authentication.");
+                    console.error("# clientContext - checkAuth - Chain authenticated is broken");
                     break;
                 case AuthType.Cognito:
-                    this.auth = new Cognito(this.Core.Constants.Authentication.update.bind(this.Core.Constants.Authentication), this.config.auth.config, this.dependencyInjection.AmazonCognito);
+                    this.auth = new Cognito(this.core.constants.authentication.update
+                        .bind(this.core.constants.authentication), this.config.auth.config, this.dependencyInjection.AmazonCognito);
                     yield this.auth.checkLocalAuth();
                     break;
                 case AuthType.None:
-                    this.Core.Constants.Authentication.update(AuthenticationState.SUCCESS);
+                    this.core.constants.authentication.update(AuthenticationState.SUCCESS);
                     break;
             }
         });
@@ -68,7 +69,7 @@ export default class ClientContext extends Module {
         return __awaiter(this, void 0, void 0, function* () {
             (_a = this.auth) === null || _a === void 0 ? void 0 : _a.signOut();
             this.auth = undefined;
-            this.Core.Constants.Authentication.update(AuthenticationState.ERROR);
+            this.core.constants.authentication.update(AuthenticationState.ERROR);
             this.start();
         });
     }
@@ -76,9 +77,11 @@ export default class ClientContext extends Module {
         return __awaiter(this, void 0, void 0, function* () {
             let home = this.config.server.find(config => config.home);
             if (!home) {
+                console.error("# clientContext - setupHomeConntection - No home specified");
                 return;
             }
             if (home.type === ServerType.Feathers) {
+                console.error("ClientContext - setupHomeConnection - Feathers not supported!");
             }
             else if (home.type === ServerType.SpringBoot) {
                 this.home = new SpringBoot({

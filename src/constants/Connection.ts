@@ -1,5 +1,5 @@
 import { action, observable } from "mobx";
-import Constant from "./Constant";
+import Constant from "./libs/Constant";
 
 export enum ConnectionState {
     ERROR,

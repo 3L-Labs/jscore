@@ -1,4 +1,4 @@
-export declare class SSE {
+export default class SSE {
     private es;
     constructor();
     newSource(sourcePath: string): Promise<unknown>;

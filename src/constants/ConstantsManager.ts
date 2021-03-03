@@ -3,7 +3,7 @@ import Connection from "./Connection";
 import Platform from "./Platform";
 
 export default class ConstantsManager { 
-    public Authentication: Authentication = new Authentication();
-    public Connection: Connection = new Connection();
-    public Platform: Platform = new Platform();
+    public authentication: Authentication = new Authentication();
+    public connection: Connection = new Connection();
+    public platform: Platform = new Platform();
 }

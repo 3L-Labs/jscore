@@ -30,7 +30,7 @@ export default class Comm extends Module {
     start() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.config.client_server) {
-                ClientServerInit(this.Core, comm);
+                ClientServerInit(this.core, comm);
             }
         });
     }

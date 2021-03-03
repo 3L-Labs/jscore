@@ -13,7 +13,7 @@ export default class Cognito extends Auth {
     private _amplify;
     private _auth;
     constructor(updateAuthState: any, cognitoConfig: any, amazonCognitoDependencies: AmazonCognitoInjection);
-    protected checkLocalAuth(): Promise<void>;
+    checkLocalAuth(): Promise<void>;
     signIn(email: string, password: string): Promise<void>;
     signUp(email: string, password: string): Promise<void>;
     confirmSignUp(email: string, confirmationCode: string): Promise<void>;

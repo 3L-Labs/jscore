@@ -16,12 +16,12 @@ export default class AppManager extends Module {
 
     public lifecycle : Lifecycle;
 
-    constructor(Core : Core<{}>, private config : Config, private dependencyInjection : DependencyInjection){
-      super(Core);
+    constructor(core : Core<{}>, private config : Config, private dependencyInjection : DependencyInjection){
+      super(core);
 
-      if (this.Core.Constants.Platform.state === PlatformState.Mobile) {
+      if (this.core.constants.platform.state === PlatformState.Mobile) {
           this.lifecycle = new MobileLifecycle(dependencyInjection);
-      } else if (this.Core.Constants.Platform.state === PlatformState.Web) {
+      } else if (this.core.constants.platform.state === PlatformState.Web) {
           this.lifecycle = new WebLifecycle();
       }
 

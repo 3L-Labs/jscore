@@ -73,16 +73,24 @@ export default class ClientContext extends Module {
 
     switch (this.config.auth.type) {
       case AuthType.Chain :
-        console.log("ClientContext : Using chain for authentication.");
+          console.error(
+              "# clientContext - checkAuth - Chain authenticated is broken"
+          );
         break;
-
       case AuthType.Cognito :
-        this.auth = new Cognito(this.Core.Constants.Authentication.update.bind(this.Core.Constants.Authentication), this.config.auth.config, this.dependencyInjection.AmazonCognito);
-        await (this.auth as any).checkLocalAuth();
-        break;
+        this.auth = new Cognito(
+            this.core.constants.authentication.update
+                .bind(
+                    this.core.constants.authentication
+                ),
+                this.config.auth.config,
+                this.dependencyInjection.AmazonCognito
+            );
 
+        await this.auth.checkLocalAuth();
+        break;
       case AuthType.None : 
-        this.Core.Constants.Authentication.update(AuthenticationState.SUCCESS)
+        this.core.constants.authentication.update(AuthenticationState.SUCCESS)
         break;
     }
 
@@ -91,7 +99,7 @@ export default class ClientContext extends Module {
   async logout() {
       this.auth?.signOut();
       this.auth = undefined;
-      this.Core.Constants.Authentication.update(AuthenticationState.ERROR);
+      this.core.constants.authentication.update(AuthenticationState.ERROR);
       this.start();
   }
 
@@ -103,12 +111,19 @@ export default class ClientContext extends Module {
     let home : ServerConfig | undefined = this.config.server.find(config => config.home);
 
     if (!home) {
+        console.error(
+          "# clientContext - setupHomeConntection - No home specified"
+        )
         return;
     }
     
     if (home.type === ServerType.Feathers) {
 
-      //Feathers support depecrated for now
+      console.error(
+        "ClientContext - setupHomeConnection - Feathers not supported!"
+      );
+
+      //FIXME: Feathers support depecrated for now
 
       /*
       this.home = new FeathersClass({
@@ -116,7 +131,8 @@ export default class ClientContext extends Module {
         useSocket : false
       });
 
-      await this.home.setupClient();*/
+      await this.home.setupClient();
+      */
 
     } else if (home.type === ServerType.SpringBoot) {
 
@@ -126,7 +142,7 @@ export default class ClientContext extends Module {
         idToken : (this.auth as any).idToken
       })
 
-      await (this.home as any).setup();
+      await this.home.setup();
     }
   }
 }  

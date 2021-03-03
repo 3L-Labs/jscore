@@ -17,6 +17,6 @@ export default class SpringBoot extends Server {
     http: HTTP;
     pubsub: PubSub;
     constructor(opts: SpringBootOpts);
-    protected setup(): Promise<void>;
+    setup(): Promise<void>;
     protected sanityCheck(): Promise<void>;
 }

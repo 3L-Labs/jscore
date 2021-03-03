@@ -1,4 +1,4 @@
-import Constant from "./Constant";
+import Constant from "./libs/Constant";
 
 export enum PlatformState { 
   Web,
@@ -19,5 +19,5 @@ export default class Platform extends Constant<PlatformState> {
         }
     }
 
-    public update(){}; //
+    public update(){};
 }

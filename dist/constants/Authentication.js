@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { action, observable } from "mobx";
-import Constant from "./Constant";
+import Constant from "./libs/Constant";
 export var AuthenticationState;
 (function (AuthenticationState) {
     AuthenticationState[AuthenticationState["SUCCESS"] = 0] = "SUCCESS";

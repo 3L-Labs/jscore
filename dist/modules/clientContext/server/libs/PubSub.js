@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { SSE } from "./SSE";
+import SSE from "./SSE";
 export var PubSubTypes;
 (function (PubSubTypes) {
     PubSubTypes[PubSubTypes["SSE"] = 0] = "SSE";

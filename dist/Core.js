@@ -13,12 +13,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { reaction, observable } from "mobx";
-import { makeAutoObservable } from "mobx";
+import { reaction, observable, makeAutoObservable } from "mobx";
 import MapConfig from "./modules/Map.config";
 import ConstantsManager from "./constants/ConstantsManager";
 import { AuthenticationState } from "./constants/Authentication";
-export let CoreConstants;
+export let coreConstants;
 let mainCore;
 let _ = {
     m() {
@@ -30,15 +29,15 @@ export default class Core {
     constructor(config) {
         this.config = config;
         this.Modules = {};
-        this.Stores = {};
+        this.stores = {};
         this.libs = {};
         this.delayedInit = [];
         this.started = false;
         this.updated = 0;
         mainCore = this;
         makeAutoObservable(this);
-        this.Constants = new ConstantsManager();
-        CoreConstants = this.Constants;
+        this.constants = new ConstantsManager();
+        coreConstants = this.constants;
         this.addConstantListeners();
         console.log("# jscore config : ", config);
     }
@@ -47,7 +46,7 @@ export default class Core {
     }
     onAuthChanged() {
         return __awaiter(this, void 0, void 0, function* () {
-            reaction(() => this.Constants.Authentication.state, (arg) => __awaiter(this, void 0, void 0, function* () {
+            reaction(() => this.constants.authentication.state, (arg) => __awaiter(this, void 0, void 0, function* () {
                 var _a;
                 if (!this.started) {
                     return;
@@ -146,12 +145,12 @@ export default class Core {
             Core.storeInjections.forEach((inject) => {
                 console.log("inject: ", inject);
                 if (inject.name) {
-                    this.Stores[inject.name] = new inject.constructor(this);
-                    this.Stores[inject.name]._();
+                    this.stores[inject.name] = new inject.constructor(this);
+                    this.stores[inject.name]._();
                 }
                 else {
-                    this.Stores[inject.constructor.name] = new inject.constructor(this);
-                    this.Stores[inject.constructor.name]._();
+                    this.stores[inject.constructor.name] = new inject.constructor(this);
+                    this.stores[inject.constructor.name]._();
                 }
             });
         });
@@ -159,7 +158,7 @@ export default class Core {
     resetStores() {
         return __awaiter(this, void 0, void 0, function* () {
             Core.storeInjections.forEach((inject) => {
-                this.Stores[inject.constructor.name]._();
+                this.stores[inject.constructor.name]._();
             });
         });
     }
@@ -183,13 +182,13 @@ export default class Core {
 }
 __decorate([
     observable
-], Core.prototype, "Constants", void 0);
+], Core.prototype, "constants", void 0);
 __decorate([
     observable
 ], Core.prototype, "Modules", void 0);
 __decorate([
     observable
-], Core.prototype, "Stores", void 0);
+], Core.prototype, "stores", void 0);
 Core.storeInjections = [];
 Core.libInjections = [];
 const jscore = {

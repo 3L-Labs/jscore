@@ -1,4 +1,4 @@
-import { SSE } from "./SSE";
+import SSE from "./SSE";
 import Socket, { MessageData } from "./Socket";
 
 export enum PubSubTypes {

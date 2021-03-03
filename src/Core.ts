@@ -1,6 +1,5 @@
 
-import { reaction, observable, makeObservable } from "mobx";
-import { makeAutoObservable } from "mobx";
+import { reaction, observable, makeAutoObservable } from "mobx";
 
 /**
  * Modules 
@@ -15,10 +14,14 @@ import ModuleManager from "./modules/ModuleManager";
 import ConstantsManager from "./constants/ConstantsManager";
 import { AppConfig } from "./constants/AppConfig";
 import { AuthenticationState } from "./constants/Authentication";
-export let CoreConstants: ConstantsManager;
+export let coreConstants: ConstantsManager;
 
 let mainCore: Core;
 
+/**
+ * TODO: Future support for multiple javascript
+ * contexts. m being the main/parent process
+ */
 let _ = {
     m<T=any,L=any>(): Core<T,L> {
         return mainCore
@@ -29,9 +32,9 @@ export { _ };
 
 export default class Core<T=any,L=any> { 
 
-    @observable public Constants: ConstantsManager;
+    @observable public constants: ConstantsManager;
     @observable public Modules: ModuleManager = {};
-    @observable public Stores: T = {} as T;
+    @observable public stores: T = {} as T;
     public libs: L = {} as L;
 
     private delayedInit : any = [];
@@ -42,8 +45,8 @@ export default class Core<T=any,L=any> {
       mainCore = this;
       makeAutoObservable(this);
 
-      this.Constants = new ConstantsManager();
-      CoreConstants = this.Constants
+      this.constants = new ConstantsManager();
+      coreConstants = this.constants
       this.addConstantListeners();
 
       console.log("# jscore config : ", config);
@@ -59,7 +62,7 @@ export default class Core<T=any,L=any> {
 
     private async onAuthChanged(){
       reaction(
-        () => this.Constants.Authentication.state,
+        () => this.constants.authentication.state,
         async (arg: AuthenticationState) => {
           if (!this.started){
             return; 
@@ -207,11 +210,11 @@ export default class Core<T=any,L=any> {
       (Core as any).storeInjections.forEach((inject : any) => {
           console.log("inject: ", inject);
           if (inject.name) {
-              this.Stores[inject.name] = new inject.constructor(this);
-              this.Stores[inject.name]._();
+              this.stores[inject.name] = new inject.constructor(this);
+              this.stores[inject.name]._();
           } else {
-              this.Stores[inject.constructor.name] = new inject.constructor(this);
-              this.Stores[inject.constructor.name]._();
+              this.stores[inject.constructor.name] = new inject.constructor(this);
+              this.stores[inject.constructor.name]._();
           }
       })
 
@@ -219,7 +222,7 @@ export default class Core<T=any,L=any> {
 
     private async resetStores(){
       (Core as any).storeInjections.forEach((inject : any) => {
-        this.Stores[inject.constructor.name]._();
+        this.stores[inject.constructor.name]._();
       })
     }
 
@@ -269,6 +272,9 @@ const jscore = {
     }
   },
 }
+
+// Probably could delete this, forget what it 
+// what it was used for
 globalThis.jscore = jscore;
 
 export { jscore }

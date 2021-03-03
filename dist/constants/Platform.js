@@ -1,4 +1,4 @@
-import Constant from "./Constant";
+import Constant from "./libs/Constant";
 export var PlatformState;
 (function (PlatformState) {
     PlatformState[PlatformState["Web"] = 0] = "Web";

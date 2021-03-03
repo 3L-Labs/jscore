@@ -1,4 +1,4 @@
-import { SSE } from "./SSE";
+import SSE from "./SSE";
 import Socket from "./Socket";
 export declare enum PubSubTypes {
     SSE = 0,

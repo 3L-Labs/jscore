@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
-import Constant from "./Constant";
+import Constant from "./libs/Constant";
 
-export enum AuthenticationState{
+export enum AuthenticationState {
   SUCCESS, 
   EMAIL_CONFIRMATION,
   EMAIL_CONFIRMATION_FAILED,

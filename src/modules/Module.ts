@@ -11,10 +11,10 @@ export interface ModuleConfig {
 }
 
 export default class Module {
-  constructor(protected Core: Core<{}>) {}
-  static async init(Core: Core<{}>, name, config, dependencies) {
+  constructor(protected core: Core<{}>) {}
+  static async init(core: Core<{}>, name, config, dependencies) {
     const ModuleClass = this;
-    Core.Modules[name] = new (ModuleClass as any)(Core, config, dependencies);
+    core.Modules[name] = new (ModuleClass as any)(core, config, dependencies);
   }
   protected async start() {}
   protected async postStart() {}

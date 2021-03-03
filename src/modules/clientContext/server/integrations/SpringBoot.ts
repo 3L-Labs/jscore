@@ -32,7 +32,7 @@ export default class SpringBoot extends Server {
 
   }
 
-  protected async setup() {
+  public async setup() {
 
     this.pubsub = new PubSub();
 

@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import Auth from "../Auth";
-import { CoreConstants } from "../../../../Core";
+import { coreConstants } from "../../../../Core";
 import { PlatformState } from "../../../../constants/Platform";
 import { AuthenticationState } from "../../../../constants/Authentication";
 export default class Cognito extends Auth {
@@ -24,7 +24,7 @@ export default class Cognito extends Auth {
             userPoolId: cognitoConfig.USER_POOL_ID,
             userPoolWebClientId: cognitoConfig.APP_CLIENT_ID,
         };
-        if (CoreConstants.Platform.state === PlatformState.Web) {
+        if (coreConstants.platform.state === PlatformState.Web) {
             amplifyAuthConfig = Object.assign(Object.assign({}, amplifyAuthConfig), {
                 cookieStorage: {
                     domain: window.location.hostname,

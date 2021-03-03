@@ -8,13 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 export default class Module {
-    constructor(Core) {
-        this.Core = Core;
+    constructor(core) {
+        this.core = core;
     }
-    static init(Core, name, config, dependencies) {
+    static init(core, name, config, dependencies) {
         return __awaiter(this, void 0, void 0, function* () {
             const ModuleClass = this;
-            Core.Modules[name] = new ModuleClass(Core, config, dependencies);
+            core.Modules[name] = new ModuleClass(core, config, dependencies);
         });
     }
     start() {
