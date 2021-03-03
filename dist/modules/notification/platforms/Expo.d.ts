@@ -7,14 +7,14 @@ export interface ExpoDependencies {
     Platform: any;
 }
 export default class ExpoNotification extends NotificationClass {
-    private Core;
+    private core;
     private config;
     protected hasPermission: boolean;
     protected listeners: ((data: any) => void)[];
     private Notifications;
     private Permissions;
     private Platform;
-    constructor(Core: Core<{}>, config: NotificationConfig, expoDependencies: ExpoDependencies);
+    constructor(core: Core<{}>, config: NotificationConfig, expoDependencies: ExpoDependencies);
     protected checkPermission(): Promise<boolean>;
     private createChannels;
     protected requestPermission(): Promise<void>;

@@ -1,6 +1,8 @@
 
 import Core from "../Core";
 import { makeAutoObservable, makeObservable, observable } from "mobx";
+import HTTP from "../modules/clientContext/server/libs/HTTP";
+import PubSub from "../modules/clientContext/server/libs/PubSub";
 
 export default class Store {
 
@@ -11,14 +13,13 @@ export default class Store {
     private foregroundCallbacks : Array<any> = new Array<any>();
     private backgroundCallbacks : Array<any> = new Array<any>();
 
-    //TODO : link in proper types here
-    protected http : any;
-    protected pubsub : any;
+    protected http : HTTP | undefined;
+    protected pubsub : PubSub;
 
-    constructor(protected Core : Core<any>, children? : any[]) {
+    constructor(protected core : Core<any>, children? : any[]) {
         if (children)
             children.forEach(c => {
-                this[c.name] = new c(Core)
+                this[c.name] = new c(core)
             })
 
         this.connectionObjects();
@@ -47,13 +48,15 @@ export default class Store {
     }
 
     protected createStore(Store, ...args){
-        const c = new Store(this.Core, ...args)
+        const c = new Store(this.core, ...args)
         return c;
     }
 
     protected connectionObjects(){
-      ///this.http = this.Core.Modules.ClientContext.home.http;
-      //this.pubsub = this.Core.Modules.ClientContext.home.pubsub;
+        if (this.core.modules.clientContext) {
+            this.http = this.core.modules?.clientContext.home.http;   
+            this.pubsub = this.core.modules?.clientContext.home.pubsub;
+        }
     }
 
     protected onRender(){
@@ -68,7 +71,9 @@ export default class Store {
 
     protected init(...funcs){
         funcs.forEach(f => {
-            //this.Core.Modules.AppManager.lifecycle.addInitCallback(f.bind(this))
+            if (this.core.modules.appManager) {
+                this.core.modules?.appManager.lifecycle.addInitCallback(f.bind(this));
+            }
             this.initCallbacks.push(f.bind(this));
         })
     }
@@ -81,7 +86,11 @@ export default class Store {
         const global = args[args.length-1]; 
 
         if (global) {
-            //funcs.forEach(f => this.Core.Modules.AppManager.lifecycle.addForegroundCallback(f.bind(this)));
+                funcs.forEach(f => {
+                    if (this.core.modules.appManager) {
+                        this.core.modules.appManager.lifecycle.addForegroundCallback(f.bind(this))
+                    }
+                });
         } else {
             funcs.forEach(f => this.foregroundCallbacks.push(f.bind(this)));
         }
@@ -96,7 +105,11 @@ export default class Store {
         const global = args[args.length-1]; 
 
         if (global) {
-            //funcs.forEach(f => this.Core.Modules.AppManager.lifecycle.addBackgroundCallback(f.bind(this)));
+                funcs.forEach(f => {
+                    if (this.core.modules.appManager) {
+                        this.core.modules.appManager.lifecycle.addBackgroundCallback(f.bind(this))
+                    }
+                });
         } else {
             funcs.forEach(f => this.backgroundCallbacks.push(f.bind(this)));
         }

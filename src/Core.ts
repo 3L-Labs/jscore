@@ -33,7 +33,7 @@ export { _ };
 export default class Core<T=any,L=any> { 
 
     @observable public constants: ConstantsManager;
-    @observable public Modules: ModuleManager = {};
+    @observable public modules: ModuleManager = {};
     @observable public stores: T = {} as T;
     public libs: L = {} as L;
 
@@ -69,9 +69,9 @@ export default class Core<T=any,L=any> {
           }
 
           if (arg === AuthenticationState.SUCCESS) {
-            await (this.Modules.ClientContext as any).start();
+            await (this.modules.clientContext as any).start();
             await this.resetStores();
-            (this.Modules.AppManager?.lifecycle as any).initCallbacks.forEach(i => i());
+            (this.modules.appManager?.lifecycle as any).initCallbacks.forEach(i => i());
 
           }
         }
@@ -123,6 +123,8 @@ export default class Core<T=any,L=any> {
         const errors: Array<any> = []
         Array.from(Object.keys(requestedModules)).forEach((moduleName) => {
 
+          console.log("module name: ", moduleName);
+
           //Get the module from the map
           const moduleConfig = requestedModules[moduleName];
           const Module = MapConfig[moduleName];
@@ -139,7 +141,7 @@ export default class Core<T=any,L=any> {
           //Start the Module, the module name is camelCased
             loadedModules.push((async () => {
               try {
-                await this.Modules[moduleName].start()
+                await this.modules[moduleName].start()
                 console.log(`# ${moduleName} : started`)
               } catch (e) {
                 errors.push({
@@ -172,14 +174,14 @@ export default class Core<T=any,L=any> {
      * Called after all modules started and stores instantiated.
      */
     private async postStart(){
-      return Promise.all(this.modules.map(m => {
+      return Promise.all(this.liveModules.map(m => {
         if((m as any).postStart)
           (m as any).postStart()
       }));
     }
 
     public async reset(){
-      return Promise.all(this.modules.map(m => (m as any).restart()));
+      return Promise.all(this.liveModules.map(m => (m as any).restart()));
     }
 
     /*************************
@@ -189,9 +191,9 @@ export default class Core<T=any,L=any> {
     /**
      * Returns current modules on the core.
      */
-    private get modules(){
+    private get liveModules(){
       return Array.from(Object.keys(this.config.modules)).map((moduleName) => {
-        return (this.Modules[moduleName] as Module);
+        return (this.modules[moduleName] as Module);
       })
     }
 

@@ -41,7 +41,7 @@ interface DependencyInjection {
 export default class ClientContext extends Module {
     private config;
     private dependencyInjection;
-    auth: Cognito | undefined;
+    auth: Cognito;
     home: SpringBoot;
     constructor(core: Core<{}>, config: Config, dependencyInjection: DependencyInjection);
     protected start(): Promise<void>;

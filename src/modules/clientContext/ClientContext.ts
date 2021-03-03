@@ -52,7 +52,7 @@ interface DependencyInjection {
 
 export default class ClientContext extends Module {
 
-  public auth : Cognito | undefined;
+  public auth : Cognito;
   public home : SpringBoot;
 
   constructor(core : Core<{}>, private config : Config, private dependencyInjection: DependencyInjection) {
@@ -98,7 +98,6 @@ export default class ClientContext extends Module {
 
   async logout() {
       this.auth?.signOut();
-      this.auth = undefined;
       this.core.constants.authentication.update(AuthenticationState.ERROR);
       this.start();
   }

@@ -6,8 +6,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import { observable } from "mobx";
 export default class Store {
-    constructor(Core, children) {
-        this.Core = Core;
+    constructor(core, children) {
+        this.core = core;
         this.isLoading = false;
         this.isRendered = false;
         this.initCallbacks = new Array();
@@ -15,7 +15,7 @@ export default class Store {
         this.backgroundCallbacks = new Array();
         if (children)
             children.forEach(c => {
-                this[c.name] = new c(Core);
+                this[c.name] = new c(core);
             });
         this.connectionObjects();
         const foreground = () => {
@@ -38,10 +38,15 @@ export default class Store {
         this.background(background(), true);
     }
     createStore(Store, ...args) {
-        const c = new Store(this.Core, ...args);
+        const c = new Store(this.core, ...args);
         return c;
     }
     connectionObjects() {
+        var _a, _b;
+        if (this.core.modules.clientContext) {
+            this.http = (_a = this.core.modules) === null || _a === void 0 ? void 0 : _a.clientContext.home.http;
+            this.pubsub = (_b = this.core.modules) === null || _b === void 0 ? void 0 : _b.clientContext.home.pubsub;
+        }
     }
     onRender() {
         if (this.isRendered)
@@ -54,6 +59,10 @@ export default class Store {
     }
     init(...funcs) {
         funcs.forEach(f => {
+            var _a;
+            if (this.core.modules.appManager) {
+                (_a = this.core.modules) === null || _a === void 0 ? void 0 : _a.appManager.lifecycle.addInitCallback(f.bind(this));
+            }
             this.initCallbacks.push(f.bind(this));
         });
     }
@@ -64,6 +73,11 @@ export default class Store {
         const funcs = args.slice(0, args.length - 1);
         const global = args[args.length - 1];
         if (global) {
+            funcs.forEach(f => {
+                if (this.core.modules.appManager) {
+                    this.core.modules.appManager.lifecycle.addForegroundCallback(f.bind(this));
+                }
+            });
         }
         else {
             funcs.forEach(f => this.foregroundCallbacks.push(f.bind(this)));
@@ -76,6 +90,11 @@ export default class Store {
         const funcs = args.slice(0, args.length - 1);
         const global = args[args.length - 1];
         if (global) {
+            funcs.forEach(f => {
+                if (this.core.modules.appManager) {
+                    this.core.modules.appManager.lifecycle.addBackgroundCallback(f.bind(this));
+                }
+            });
         }
         else {
             funcs.forEach(f => this.backgroundCallbacks.push(f.bind(this)));

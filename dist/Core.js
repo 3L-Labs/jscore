@@ -28,7 +28,7 @@ export { _ };
 export default class Core {
     constructor(config) {
         this.config = config;
-        this.Modules = {};
+        this.modules = {};
         this.stores = {};
         this.libs = {};
         this.delayedInit = [];
@@ -52,9 +52,9 @@ export default class Core {
                     return;
                 }
                 if (arg === AuthenticationState.SUCCESS) {
-                    yield this.Modules.ClientContext.start();
+                    yield this.modules.clientContext.start();
                     yield this.resetStores();
-                    ((_a = this.Modules.AppManager) === null || _a === void 0 ? void 0 : _a.lifecycle).initCallbacks.forEach(i => i());
+                    ((_a = this.modules.appManager) === null || _a === void 0 ? void 0 : _a.lifecycle).initCallbacks.forEach(i => i());
                 }
             }));
         });
@@ -84,6 +84,7 @@ export default class Core {
                 const loadedModules = [];
                 const errors = [];
                 Array.from(Object.keys(requestedModules)).forEach((moduleName) => {
+                    console.log("module name: ", moduleName);
                     const moduleConfig = requestedModules[moduleName];
                     const Module = MapConfig[moduleName];
                     let dependencies;
@@ -93,7 +94,7 @@ export default class Core {
                     Module.init(this, moduleName, moduleConfig, dependencies);
                     loadedModules.push((() => __awaiter(this, void 0, void 0, function* () {
                         try {
-                            yield this.Modules[moduleName].start();
+                            yield this.modules[moduleName].start();
                             console.log(`# ${moduleName} : started`);
                         }
                         catch (e) {
@@ -120,7 +121,7 @@ export default class Core {
     }
     postStart() {
         return __awaiter(this, void 0, void 0, function* () {
-            return Promise.all(this.modules.map(m => {
+            return Promise.all(this.liveModules.map(m => {
                 if (m.postStart)
                     m.postStart();
             }));
@@ -128,12 +129,12 @@ export default class Core {
     }
     reset() {
         return __awaiter(this, void 0, void 0, function* () {
-            return Promise.all(this.modules.map(m => m.restart()));
+            return Promise.all(this.liveModules.map(m => m.restart()));
         });
     }
-    get modules() {
+    get liveModules() {
         return Array.from(Object.keys(this.config.modules)).map((moduleName) => {
-            return this.Modules[moduleName];
+            return this.modules[moduleName];
         });
     }
     startStores() {
@@ -185,7 +186,7 @@ __decorate([
 ], Core.prototype, "constants", void 0);
 __decorate([
     observable
-], Core.prototype, "Modules", void 0);
+], Core.prototype, "modules", void 0);
 __decorate([
     observable
 ], Core.prototype, "stores", void 0);

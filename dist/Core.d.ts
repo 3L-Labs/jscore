@@ -9,7 +9,7 @@ export { _ };
 export default class Core<T = any, L = any> {
     private config;
     constants: ConstantsManager;
-    Modules: ModuleManager;
+    modules: ModuleManager;
     stores: T;
     libs: L;
     private delayedInit;
@@ -21,7 +21,7 @@ export default class Core<T = any, L = any> {
     start(dependencyInjection?: any): Promise<Core<T>>;
     private postStart;
     reset(): Promise<any[]>;
-    private get modules();
+    private get liveModules();
     private startStores;
     private resetStores;
     private startLibs;

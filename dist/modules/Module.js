@@ -14,7 +14,7 @@ export default class Module {
     static init(core, name, config, dependencies) {
         return __awaiter(this, void 0, void 0, function* () {
             const ModuleClass = this;
-            core.Modules[name] = new ModuleClass(core, config, dependencies);
+            core.modules[name] = new ModuleClass(core, config, dependencies);
         });
     }
     start() {

@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import NotificationClass from "../AbstractNotification";
 export default class ExpoNotification extends NotificationClass {
-    constructor(Core, config, expoDependencies) {
+    constructor(core, config, expoDependencies) {
         super();
-        this.Core = Core;
+        this.core = core;
         this.config = config;
         this.listeners = [];
         this.Notifications = expoDependencies.Notifications;
@@ -69,7 +69,7 @@ export default class ExpoNotification extends NotificationClass {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const token = yield this.getToken();
-            (_a = this.Core.Modules.ClientContext) === null || _a === void 0 ? void 0 : _a.home.http.post(this.config.mobile.pushTokenEndpoint, {
+            (_a = this.core.modules.clientContext) === null || _a === void 0 ? void 0 : _a.home.http.post(this.config.mobile.pushTokenEndpoint, {
                 token: token
             });
         });

@@ -5,9 +5,9 @@ import Log from "./log/Log";
 import Comm from "./comm/Comm";
 
 export default { 
-  AppManager : AppManager,
-  ClientContext : ClientContext,
-  Notification : Notification,
-  Log: Log,
-  Comm: Comm
+  appManager : AppManager,
+  clientContext : ClientContext,
+  notification : Notification,
+  log: Log,
+  comm: Comm
 }

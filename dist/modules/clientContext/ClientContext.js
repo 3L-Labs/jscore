@@ -68,7 +68,6 @@ export default class ClientContext extends Module {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             (_a = this.auth) === null || _a === void 0 ? void 0 : _a.signOut();
-            this.auth = undefined;
             this.core.constants.authentication.update(AuthenticationState.ERROR);
             this.start();
         });

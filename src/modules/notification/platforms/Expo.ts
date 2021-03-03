@@ -16,7 +16,7 @@ export default class ExpoNotification extends NotificationClass {
   private Permissions : any;
   private Platform : any;
 
-  constructor(private Core : Core<{}>, private config : NotificationConfig, expoDependencies : ExpoDependencies) {
+  constructor(private core : Core<{}>, private config : NotificationConfig, expoDependencies : ExpoDependencies) {
     super();
     this.Notifications = expoDependencies.Notifications;
     this.Permissions = expoDependencies.Permissions;
@@ -67,7 +67,7 @@ export default class ExpoNotification extends NotificationClass {
 
   protected async updateToken() {
     const token = await this.getToken();
-    this.Core.Modules.ClientContext?.home.http.post(this.config.mobile.pushTokenEndpoint, {
+    this.core.modules.clientContext?.home.http.post(this.config.mobile.pushTokenEndpoint, {
         token : token
     });
   }

@@ -1,14 +1,16 @@
 import Core from "../Core";
+import HTTP from "../modules/clientContext/server/libs/HTTP";
+import PubSub from "../modules/clientContext/server/libs/PubSub";
 export default class Store {
-    protected Core: Core<any>;
+    protected core: Core<any>;
     isLoading: boolean;
     private isRendered;
     private initCallbacks;
     private foregroundCallbacks;
     private backgroundCallbacks;
-    protected http: any;
-    protected pubsub: any;
-    constructor(Core: Core<any>, children?: any[]);
+    protected http: HTTP | undefined;
+    protected pubsub: PubSub;
+    constructor(core: Core<any>, children?: any[]);
     protected createStore(Store: any, ...args: any[]): any;
     protected connectionObjects(): void;
     protected onRender(): void;

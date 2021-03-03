@@ -14,7 +14,7 @@ export default class Module {
   constructor(protected core: Core<{}>) {}
   static async init(core: Core<{}>, name, config, dependencies) {
     const ModuleClass = this;
-    core.Modules[name] = new (ModuleClass as any)(core, config, dependencies);
+    core.modules[name] = new (ModuleClass as any)(core, config, dependencies);
   }
   protected async start() {}
   protected async postStart() {}

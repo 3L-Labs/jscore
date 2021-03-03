@@ -4,9 +4,9 @@ import Notification from "./notification/Notification";
 import Log from "./log/Log";
 import Comm from "./comm/Comm";
 export default class ModuleManager {
-    AppManager?: AppManager;
-    ClientContext?: ClientContext;
-    Notification?: Notification;
-    Log?: Log;
-    Comm?: Comm;
+    appManager?: AppManager;
+    clientContext?: ClientContext;
+    notification?: Notification;
+    log?: Log;
+    comm?: Comm;
 }
