@@ -23,6 +23,7 @@
     "exclude": [
         "**/*.spec.ts",
         "node_modules",
-        "sockjs-client/*"
+        "sockjs-client/*",
+        "src/modules/matrix/lib/*"
     ]
 }

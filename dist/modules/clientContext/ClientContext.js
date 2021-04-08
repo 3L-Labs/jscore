@@ -15,6 +15,7 @@ export var AuthType;
 (function (AuthType) {
     AuthType["Chain"] = "Chain";
     AuthType["Cognito"] = "Cognito";
+    AuthType["Matrix"] = "Matrix";
     AuthType["OAuth"] = "OAuth";
     AuthType["None"] = "None";
 })(AuthType || (AuthType = {}));
@@ -22,6 +23,7 @@ export var ServerType;
 (function (ServerType) {
     ServerType["Feathers"] = "Feathers";
     ServerType["SpringBoot"] = "SpringBoot";
+    ServerType["Matrix"] = "Matrix";
 })(ServerType || (ServerType = {}));
 export var CommunicationTypes;
 (function (CommunicationTypes) {
@@ -58,6 +60,9 @@ export default class ClientContext extends Module {
                         .bind(this.core.constants.authentication), this.config.auth.config, this.dependencyInjection.AmazonCognito);
                     yield this.auth.checkLocalAuth();
                     break;
+                case AuthType.Matrix:
+                    console.log("check matrix auth here");
+                    break;
                 case AuthType.None:
                     this.core.constants.authentication.update(AuthenticationState.SUCCESS);
                     break;
@@ -89,6 +94,8 @@ export default class ClientContext extends Module {
                     idToken: this.auth.idToken
                 });
                 yield this.home.setup();
+            }
+            else if (home.type === ServerType.Matrix) {
             }
         });
     }

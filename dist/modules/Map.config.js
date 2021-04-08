@@ -3,11 +3,13 @@ import ClientContext from "./clientContext/ClientContext";
 import Notification from "./notification/Notification";
 import Log from "./log/Log";
 import Comm from "./comm/Comm";
+import Matrix from "./matrix/Matrix";
 export default {
     appManager: AppManager,
     clientContext: ClientContext,
     notification: Notification,
     log: Log,
-    comm: Comm
+    comm: Comm,
+    matrix: Matrix
 };
 //# sourceMappingURL=Map.config.js.map

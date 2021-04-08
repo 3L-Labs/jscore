@@ -14,7 +14,6 @@ export default class Core<T = any, L = any> {
     libs: L;
     private delayedInit;
     started: boolean;
-    updated: number;
     constructor(config: AppConfig);
     private addConstantListeners;
     private onAuthChanged;

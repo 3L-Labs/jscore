@@ -43,9 +43,14 @@ export default class Store {
     }
     connectionObjects() {
         var _a, _b;
-        if (this.core.modules.clientContext) {
-            this.http = (_a = this.core.modules) === null || _a === void 0 ? void 0 : _a.clientContext.home.http;
-            this.pubsub = (_b = this.core.modules) === null || _b === void 0 ? void 0 : _b.clientContext.home.pubsub;
+        try {
+            if (this.core.modules.clientContext) {
+                this.http = (_a = this.core.modules) === null || _a === void 0 ? void 0 : _a.clientContext.home.http;
+                this.pubsub = (_b = this.core.modules) === null || _b === void 0 ? void 0 : _b.clientContext.home.pubsub;
+            }
+        }
+        catch (e) {
+            console.warn("Failed creating connection objects");
         }
     }
     onRender() {

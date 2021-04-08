@@ -24,6 +24,9 @@ export default class SpringBoot extends Server {
     setup() {
         return __awaiter(this, void 0, void 0, function* () {
             this.pubsub = new PubSub();
+            if (!this.opts || !this.opts.config || !this.opts.config.communicationTypes) {
+                return;
+            }
             yield Promise.all(this.opts.config.communicationTypes.map((type) => {
                 switch (type) {
                     case CommunicationTypes.http:

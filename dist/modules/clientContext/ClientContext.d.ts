@@ -6,12 +6,14 @@ import Module, { ModuleConfig } from '../Module';
 export declare enum AuthType {
     Chain = "Chain",
     Cognito = "Cognito",
+    Matrix = "Matrix",
     OAuth = "OAuth",
     None = "None"
 }
 export declare enum ServerType {
     Feathers = "Feathers",
-    SpringBoot = "SpringBoot"
+    SpringBoot = "SpringBoot",
+    Matrix = "Matrix"
 }
 export declare enum CommunicationTypes {
     http = "http",
@@ -22,10 +24,10 @@ export interface ServerConfig {
     type: ServerType;
     home?: boolean;
     name: string;
-    communicationTypes: CommunicationTypes[];
-    socket: SocketOptions;
+    communicationTypes?: CommunicationTypes[];
+    socket?: SocketOptions;
     path: string;
-    apiVersion: string;
+    apiVersion?: string;
 }
 interface AuthConfig {
     type: AuthType;

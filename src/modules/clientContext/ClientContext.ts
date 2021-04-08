@@ -10,13 +10,15 @@ import { AuthenticationState } from '../../constants/Authentication';
 export enum AuthType { 
   Chain = "Chain", 
   Cognito = "Cognito",
+  Matrix = "Matrix",
   OAuth = "OAuth",
   None = "None"
 }
 
 export enum ServerType { 
   Feathers  = "Feathers",
-  SpringBoot = "SpringBoot"
+  SpringBoot = "SpringBoot",
+  Matrix = "Matrix"
 }
 
 export enum CommunicationTypes { 
@@ -29,10 +31,10 @@ export interface ServerConfig {
   type : ServerType, 
   home? : boolean,
   name : string,
-  communicationTypes : CommunicationTypes[],
-  socket : SocketOptions,
+  communicationTypes? : CommunicationTypes[],
+  socket? : SocketOptions,
   path : string,
-  apiVersion : string 
+  apiVersion? : string 
 }
 
 interface AuthConfig { 
@@ -89,6 +91,9 @@ export default class ClientContext extends Module {
 
         await this.auth.checkLocalAuth();
         break;
+      case AuthType.Matrix:
+        console.log("check matrix auth here")
+        break;
       case AuthType.None : 
         this.core.constants.authentication.update(AuthenticationState.SUCCESS)
         break;
@@ -142,6 +147,7 @@ export default class ClientContext extends Module {
       })
 
       await this.home.setup();
+    } else if (home.type === ServerType.Matrix) {
     }
   }
 }  

@@ -3,6 +3,7 @@ import ClientContext from "./clientContext/ClientContext";
 import Notification from "./notification/Notification";
 import Log from "./log/Log";
 import Comm from "./comm/Comm";
+import Matrix from "./matrix/Matrix";
 
 export default class ModuleManager {
     public appManager?: AppManager;
@@ -10,4 +11,5 @@ export default class ModuleManager {
     public notification?: Notification;
     public log?: Log;
     public comm?: Comm;
+    public matrix?: Matrix;
 }

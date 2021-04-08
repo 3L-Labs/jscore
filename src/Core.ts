@@ -8,6 +8,8 @@ import MapConfig from "./modules/Map.config";
 import Module from "./modules/Module";
 import ModuleManager from "./modules/ModuleManager";
 
+const x = "new";
+
 /**
  * Constants
  */
@@ -39,7 +41,6 @@ export default class Core<T=any,L=any> {
 
     private delayedInit : any = [];
     public started: boolean = false;
-    public updated: number = 0;
 
     constructor(private config : AppConfig) {
       mainCore = this;
@@ -123,8 +124,6 @@ export default class Core<T=any,L=any> {
         const errors: Array<any> = []
         Array.from(Object.keys(requestedModules)).forEach((moduleName) => {
 
-          console.log("module name: ", moduleName);
-
           //Get the module from the map
           const moduleConfig = requestedModules[moduleName];
           const Module = MapConfig[moduleName];
@@ -147,7 +146,7 @@ export default class Core<T=any,L=any> {
                 errors.push({
                   type : "critical",
                 })
-                console.log(`%# ${moduleName} : failed to start`, "color:red", e);
+                console.log(`# ${moduleName} : failed to start`, "color:red", e);
               }
             })());
         })
@@ -210,7 +209,6 @@ export default class Core<T=any,L=any> {
 
       //start our stores or any injected class (classes that are using the @jscore)
       (Core as any).storeInjections.forEach((inject : any) => {
-          console.log("inject: ", inject);
           if (inject.name) {
               this.stores[inject.name] = new inject.constructor(this);
               this.stores[inject.name]._();

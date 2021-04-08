@@ -15,6 +15,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { reaction, observable, makeAutoObservable } from "mobx";
 import MapConfig from "./modules/Map.config";
+const x = "new";
 import ConstantsManager from "./constants/ConstantsManager";
 import { AuthenticationState } from "./constants/Authentication";
 export let coreConstants;
@@ -33,7 +34,6 @@ export default class Core {
         this.libs = {};
         this.delayedInit = [];
         this.started = false;
-        this.updated = 0;
         mainCore = this;
         makeAutoObservable(this);
         this.constants = new ConstantsManager();
@@ -84,7 +84,6 @@ export default class Core {
                 const loadedModules = [];
                 const errors = [];
                 Array.from(Object.keys(requestedModules)).forEach((moduleName) => {
-                    console.log("module name: ", moduleName);
                     const moduleConfig = requestedModules[moduleName];
                     const Module = MapConfig[moduleName];
                     let dependencies;
@@ -101,7 +100,7 @@ export default class Core {
                             errors.push({
                                 type: "critical",
                             });
-                            console.log(`%# ${moduleName} : failed to start`, "color:red", e);
+                            console.log(`# ${moduleName} : failed to start`, "color:red", e);
                         }
                     }))());
                 });
@@ -144,7 +143,6 @@ export default class Core {
             }
             const stores = {};
             Core.storeInjections.forEach((inject) => {
-                console.log("inject: ", inject);
                 if (inject.name) {
                     this.stores[inject.name] = new inject.constructor(this);
                     this.stores[inject.name]._();

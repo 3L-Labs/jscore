@@ -36,6 +36,10 @@ export default class SpringBoot extends Server {
 
     this.pubsub = new PubSub();
 
+    if (!this.opts || !this.opts.config || !this.opts.config.communicationTypes) {
+        return;
+    }
+
     await Promise.all(this.opts.config.communicationTypes.map((type) : any => {
 
       switch (type) {
