@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { action, observable } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 import Constant from "./libs/Constant";
 export var AuthenticationState;
 (function (AuthenticationState) {
@@ -16,10 +16,12 @@ export var AuthenticationState;
 })(AuthenticationState || (AuthenticationState = {}));
 export default class Authentication extends Constant {
     constructor() {
-        super(...arguments);
+        super();
         this.state = AuthenticationState.UNKNOWN;
+        makeObservable(this);
     }
     update(state) {
+        console.log("updating state!");
         this.state = state;
     }
 }

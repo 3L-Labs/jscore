@@ -7,6 +7,7 @@ export declare enum AuthenticationState {
     UNKNOWN = 4
 }
 export default class Authentication extends Constant<AuthenticationState> {
+    constructor();
     state: AuthenticationState;
     update(state: AuthenticationState): void;
 }

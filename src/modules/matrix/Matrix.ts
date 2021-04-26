@@ -13,30 +13,20 @@ interface Config {
     home: string;
 }
 
-interface DependencyInjection {
-}
+interface DependencyInjection {}
 
 export default class Matrix extends Module {
+    public client;
 
-    constructor(core : Core<{}>, private config : Config, private dependencyInjection: DependencyInjection) {
+    constructor(
+        core : Core<{}>,
+        private config : Config,
+        _dependencyInjection: DependencyInjection
+    ) {
         super(core);
     }
 
     async start(){
-        const client = matrixcs.createClient(this.config.home);
-        client.login("m.login.password", {"user": "machine_sinatra", "password": "warmout"}).then((response) => {
-            console.log(response.access_token);
-        });
-    }
-
-    async signIn(username:string , password: string) {
-
-    }
-
-    async createAccount(username:string , password: string) {
-
-    }
-
-    private setup(){
+        this.client = matrixcs.createClient(this.config.home);
     }
 }

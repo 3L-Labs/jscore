@@ -1,8 +1,9 @@
-import SpringBoot from './server/integrations/SpringBoot';
 import { SocketOptions } from './server/libs/Socket';
-import Cognito, { AmazonCognitoInjection } from './auth/integrations/Cognito';
+import { AmazonCognitoInjection } from './auth/integrations/Cognito';
 import Core from '../../Core';
 import Module, { ModuleConfig } from '../Module';
+import Auth from './auth/Auth';
+import Server from './server/Server';
 export declare enum AuthType {
     Chain = "Chain",
     Cognito = "Cognito",
@@ -43,8 +44,8 @@ interface DependencyInjection {
 export default class ClientContext extends Module {
     private config;
     private dependencyInjection;
-    auth: Cognito;
-    home: SpringBoot;
+    auth: Auth<any>;
+    home?: Server;
     constructor(core: Core<{}>, config: Config, dependencyInjection: DependencyInjection);
     protected start(): Promise<void>;
     private checkAuth;

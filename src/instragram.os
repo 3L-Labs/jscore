@@ -1,30 +1,33 @@
-
-osi.
-
 {
+    name: "Instragram",
     runtime : {
         version: 1.0.0
     },
     stdlib : {
-        version: 0.3.0
+        version: 1.0.0
     },
-    children : {
+    local : {
         root: {
-            name: Evntlab
             roomId: "!jhpZBTbckszblMYjMK:matrix.org"
             content_location: 0x23oas34lj
         },
-        other : [
-            {
-                name: Chat
-                roomId: 0x213ab32
-                content_location: 0x23oas34lj
-            },
+        replicated : [
             {
                 name: Chat
                 roomId: 0x213ab32
                 content_location: 0x23oas34lj
             },
         ]
+        activity: {
+            roomId: "!jhpZBTbckszblMYjMK:matrix.org"
+        },
     },
+    global: {
+        indexer : {
+            roomId: "!jhpZBTbckszblMYjMK:matrix.org"
+        },
+        activity: {
+            roomId: "!jhpZBTbckszblMYjMK:matrix.org"
+        },
+    }
 }

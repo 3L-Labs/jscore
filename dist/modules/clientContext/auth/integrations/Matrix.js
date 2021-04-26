@@ -7,19 +7,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { AuthenticationState } from "../../../../constants/Authentication";
 import Auth from "../Auth";
 export default class Matrix extends Auth {
-    constructor(updateAuthState, cognitoConfig) {
+    constructor(updateAuthState, cognitoConfig, matrix) {
         super();
         this.updateAuthState = updateAuthState;
         this.cognitoConfig = cognitoConfig;
+        this.matrix = matrix;
     }
     checkLocalAuth() {
         return __awaiter(this, void 0, void 0, function* () {
+            return true;
         });
     }
-    signIn(email, password) {
+    signIn(username, password) {
         return __awaiter(this, void 0, void 0, function* () {
+            try {
+                this.updateAuthState(AuthenticationState.SUCCESS);
+            }
+            catch (e) {
+                this.updateAuthState(AuthenticationState.ERROR);
+            }
         });
     }
     signUp(email, password) {

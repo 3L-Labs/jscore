@@ -8,11 +8,14 @@ export interface AmazonCognitoInjection {
   auth: any
 }
 
+interface CognitoTokens {
+    idToken: string;
+    accessToken: string;
+    refreshToken: string;
+}
+
 //(window as any).LOG_LEVEL = 'DEBUG' -> Enable this if you want more logging from Cognito
-export default class Cognito extends Auth {
-    protected idToken: string;
-    protected accessToken: string;
-    protected refreshToken: string;
+export default class Cognito extends Auth<CognitoTokens> {
     private _amplify;
     private _auth;
 
@@ -53,21 +56,27 @@ export default class Cognito extends Auth {
     public async checkLocalAuth(){
         const response = await this._auth.currentAuthenticatedUser()
 
+        if (!response) {
+            return false;
+        }
+
         const tokens = await this._auth.currentSession()
-        this.idToken = tokens.getIdToken().getJwtToken();
-        this.accessToken = tokens.getAccessToken().getJwtToken();
-        this.refreshToken = tokens.getRefreshToken().getToken();
+        this.tokens.idToken = tokens.getIdToken().getJwtToken();
+        this.tokens.accessToken = tokens.getAccessToken().getJwtToken();
+        this.tokens.refreshToken = tokens.getRefreshToken().getToken();
 
         this.updateAuthState(AuthenticationState.SUCCESS, response, response.username);
+
+        return true;
     }
 
     public async signIn(email: string, password: string) {
         try {
             const response = await this._auth.signIn(email, password);
             const tokens = await this._auth.currentSession()
-            this.idToken = tokens.getIdToken().getJwtToken();
-            this.accessToken = tokens.getAccessToken().getJwtToken();
-            this.refreshToken = tokens.getRefreshToken().getToken();
+            this.tokens.idToken = tokens.getIdToken().getJwtToken();
+            this.tokens.accessToken = tokens.getAccessToken().getJwtToken();
+            this.tokens.refreshToken = tokens.getRefreshToken().getToken();
 
             this.updateAuthState(AuthenticationState.SUCCESS, response, email);
 		} catch (e) {

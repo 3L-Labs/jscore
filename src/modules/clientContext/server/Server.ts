@@ -5,12 +5,12 @@ import Socket from "./libs/Socket";
 
 export default abstract class Server { 
 
-    protected abstract setup(): void
+    abstract setup(): void
     protected abstract sanityCheck(): void
 
-    http? : HTTP
+    http : HTTP
     protected sse? : SSE
     protected socket? : Socket
-    pubsub? : PubSub
+    pubsub : PubSub
 
 }

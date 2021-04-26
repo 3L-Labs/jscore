@@ -157,7 +157,10 @@ export default class Core {
     resetStores() {
         return __awaiter(this, void 0, void 0, function* () {
             Core.storeInjections.forEach((inject) => {
-                this.stores[inject.constructor.name]._();
+                if (!inject) {
+                    return;
+                }
+                this.stores[inject.constructor.name.toLowerCase()]._();
             });
         });
     }

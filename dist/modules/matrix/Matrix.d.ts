@@ -7,11 +7,8 @@ interface DependencyInjection {
 }
 export default class Matrix extends Module {
     private config;
-    private dependencyInjection;
-    constructor(core: Core<{}>, config: Config, dependencyInjection: DependencyInjection);
+    client: any;
+    constructor(core: Core<{}>, config: Config, _dependencyInjection: DependencyInjection);
     start(): Promise<void>;
-    signIn(username: string, password: string): Promise<void>;
-    createAccount(username: string, password: string): Promise<void>;
-    private setup;
 }
 export {};

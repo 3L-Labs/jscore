@@ -42,12 +42,14 @@ export default class Store {
         return c;
     }
     connectionObjects() {
-        var _a, _b;
+        var _a, _b, _c, _d;
         try {
-            if (this.core.modules.clientContext) {
-                this.http = (_a = this.core.modules) === null || _a === void 0 ? void 0 : _a.clientContext.home.http;
-                this.pubsub = (_b = this.core.modules) === null || _b === void 0 ? void 0 : _b.clientContext.home.pubsub;
+            if (!this.core.modules.clientContext ||
+                !this.core.modules.clientContext.home) {
+                return;
             }
+            this.http = (_b = (_a = this.core.modules) === null || _a === void 0 ? void 0 : _a.clientContext) === null || _b === void 0 ? void 0 : _b.home.http;
+            this.pubsub = (_d = (_c = this.core.modules) === null || _c === void 0 ? void 0 : _c.clientContext) === null || _d === void 0 ? void 0 : _d.home.pubsub;
         }
         catch (e) {
             console.warn("Failed creating connection objects");

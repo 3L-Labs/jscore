@@ -11,6 +11,7 @@ import SpringBoot from './server/integrations/SpringBoot';
 import Cognito from './auth/integrations/Cognito';
 import Module from '../Module';
 import { AuthenticationState } from '../../constants/Authentication';
+import Matrix from './auth/integrations/Matrix';
 export var AuthType;
 (function (AuthType) {
     AuthType["Chain"] = "Chain";
@@ -39,13 +40,11 @@ export default class ClientContext extends Module {
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield this.checkAuth();
-                yield this.setupHomeConnection();
-            }
-            catch (e) {
-                yield this.setupHomeConnection();
-                throw e;
+            if (this.config.auth) {
+                const isAuthenticated = this.checkAuth();
+                if (isAuthenticated) {
+                    yield this.setupHomeConnection();
+                }
             }
         });
     }
@@ -58,34 +57,42 @@ export default class ClientContext extends Module {
                 case AuthType.Cognito:
                     this.auth = new Cognito(this.core.constants.authentication.update
                         .bind(this.core.constants.authentication), this.config.auth.config, this.dependencyInjection.AmazonCognito);
-                    yield this.auth.checkLocalAuth();
-                    break;
+                    return yield this.auth.checkLocalAuth();
                 case AuthType.Matrix:
-                    console.log("check matrix auth here");
-                    break;
+                    if (!this.core.modules.matrix) {
+                        console.error("# clientContext - checkAuth - Matrix authentication has a dependency on the Matrix Module!");
+                    }
+                    this.auth = new Matrix(this.core.constants.authentication.update
+                        .bind(this.core.constants.authentication), this.config.auth.config, this.core.modules.matrix);
+                    return yield this.auth.checkLocalAuth();
                 case AuthType.None:
                     this.core.constants.authentication.update(AuthenticationState.SUCCESS);
                     break;
             }
+            return false;
         });
     }
     logout() {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             (_a = this.auth) === null || _a === void 0 ? void 0 : _a.signOut();
-            this.core.constants.authentication.update(AuthenticationState.ERROR);
+            this.core.constants.authentication.update(AuthenticationState.UNKNOWN);
             this.start();
         });
     }
     setupHomeConnection() {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!this.config.server) {
+                console.log("# clientContext - setupHomeConntection - No server specified");
+                return;
+            }
             let home = this.config.server.find(config => config.home);
             if (!home) {
-                console.error("# clientContext - setupHomeConntection - No home specified");
+                console.log("# clientContext - setupHomeConntection - No home specified");
                 return;
             }
             if (home.type === ServerType.Feathers) {
-                console.error("ClientContext - setupHomeConnection - Feathers not supported!");
+                console.error("# clientContext - setupHomeConntection - Feathers is not supported anymore");
             }
             else if (home.type === ServerType.SpringBoot) {
                 this.home = new SpringBoot({
@@ -95,7 +102,8 @@ export default class ClientContext extends Module {
                 });
                 yield this.home.setup();
             }
-            else if (home.type === ServerType.Matrix) {
+            else {
+                console.log(`# clientContext - setupHomeConntection - No clientContext integration found for ${home.type}`);
             }
         });
     }

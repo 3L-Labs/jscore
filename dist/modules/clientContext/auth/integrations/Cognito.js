@@ -41,11 +41,15 @@ export default class Cognito extends Auth {
     checkLocalAuth() {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this._auth.currentAuthenticatedUser();
+            if (!response) {
+                return false;
+            }
             const tokens = yield this._auth.currentSession();
-            this.idToken = tokens.getIdToken().getJwtToken();
-            this.accessToken = tokens.getAccessToken().getJwtToken();
-            this.refreshToken = tokens.getRefreshToken().getToken();
+            this.tokens.idToken = tokens.getIdToken().getJwtToken();
+            this.tokens.accessToken = tokens.getAccessToken().getJwtToken();
+            this.tokens.refreshToken = tokens.getRefreshToken().getToken();
             this.updateAuthState(AuthenticationState.SUCCESS, response, response.username);
+            return true;
         });
     }
     signIn(email, password) {
@@ -53,9 +57,9 @@ export default class Cognito extends Auth {
             try {
                 const response = yield this._auth.signIn(email, password);
                 const tokens = yield this._auth.currentSession();
-                this.idToken = tokens.getIdToken().getJwtToken();
-                this.accessToken = tokens.getAccessToken().getJwtToken();
-                this.refreshToken = tokens.getRefreshToken().getToken();
+                this.tokens.idToken = tokens.getIdToken().getJwtToken();
+                this.tokens.accessToken = tokens.getAccessToken().getJwtToken();
+                this.tokens.refreshToken = tokens.getRefreshToken().getToken();
                 this.updateAuthState(AuthenticationState.SUCCESS, response, email);
             }
             catch (e) {

@@ -222,7 +222,12 @@ export default class Core<T=any,L=any> {
 
     private async resetStores(){
       (Core as any).storeInjections.forEach((inject : any) => {
-        this.stores[inject.constructor.name]._();
+
+        if (!inject) {
+            return;
+        }
+
+        this.stores[inject.constructor.name.toLowerCase()]._();
       })
     }
 

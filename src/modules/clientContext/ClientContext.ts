@@ -6,6 +6,9 @@ import Cognito, { AmazonCognitoInjection } from './auth/integrations/Cognito';
 import Core from '../../Core';
 import Module, { ModuleConfig } from '../Module';
 import { AuthenticationState } from '../../constants/Authentication';
+import Auth from './auth/Auth';
+import Server from './server/Server';
+import Matrix from './auth/integrations/Matrix';
 
 export enum AuthType { 
   Chain = "Chain", 
@@ -53,21 +56,20 @@ interface DependencyInjection {
 }
 
 export default class ClientContext extends Module {
-
-  public auth : Cognito;
-  public home : SpringBoot;
+  public auth : Auth<any>;
+  public home? : Server;
 
   constructor(core : Core<{}>, private config : Config, private dependencyInjection: DependencyInjection) {
     super(core);
   }
 
   protected async start() {
-    try {
-      await this.checkAuth();
-      await this.setupHomeConnection();
-    } catch (e) {
-      await this.setupHomeConnection();
-      throw e;
+    if (this.config.auth) {
+      const isAuthenticated = this.checkAuth();
+
+      if (isAuthenticated) {
+        await this.setupHomeConnection();
+      }
     }
   }
 
@@ -76,7 +78,7 @@ export default class ClientContext extends Module {
     switch (this.config.auth.type) {
       case AuthType.Chain :
           console.error(
-              "# clientContext - checkAuth - Chain authenticated is broken"
+            "# clientContext - checkAuth - Chain authenticated is broken"
           );
         break;
       case AuthType.Cognito :
@@ -89,22 +91,36 @@ export default class ClientContext extends Module {
                 this.dependencyInjection.AmazonCognito
             );
 
-        await this.auth.checkLocalAuth();
-        break;
+        return await this.auth.checkLocalAuth();
       case AuthType.Matrix:
-        console.log("check matrix auth here")
-        break;
+        if (!this.core.modules.matrix) {
+          console.error(
+            "# clientContext - checkAuth - Matrix authentication has a dependency on the Matrix Module!"
+          );
+        }
+        this.auth = new Matrix(
+            this.core.constants.authentication.update
+              .bind(
+                this.core.constants.authentication
+              ),
+              this.config.auth.config,
+              this.core.modules.matrix
+            );
+          return await this.auth.checkLocalAuth();
       case AuthType.None : 
         this.core.constants.authentication.update(AuthenticationState.SUCCESS)
         break;
     }
 
+    return false;
   }
 
   async logout() {
-      this.auth?.signOut();
-      this.core.constants.authentication.update(AuthenticationState.ERROR);
-      this.start();
+    this.auth?.signOut();
+    this.core.constants.authentication.update(
+      AuthenticationState.UNKNOWN
+    );
+    this.start();
   }
 
   /**
@@ -112,10 +128,18 @@ export default class ClientContext extends Module {
    */
   private async setupHomeConnection() {
 
+    if(!this.config.server) {
+        console.log(
+          "# clientContext - setupHomeConntection - No server specified"
+        )
+        return;
+    }
+
+
     let home : ServerConfig | undefined = this.config.server.find(config => config.home);
 
     if (!home) {
-        console.error(
+        console.log(
           "# clientContext - setupHomeConntection - No home specified"
         )
         return;
@@ -124,10 +148,10 @@ export default class ClientContext extends Module {
     if (home.type === ServerType.Feathers) {
 
       console.error(
-        "ClientContext - setupHomeConnection - Feathers not supported!"
+        "# clientContext - setupHomeConntection - Feathers is not supported anymore"
       );
 
-      //FIXME: Feathers support depecrated for now
+      //TODO: Feathers support depecrated for now
 
       /*
       this.home = new FeathersClass({
@@ -147,7 +171,10 @@ export default class ClientContext extends Module {
       })
 
       await this.home.setup();
-    } else if (home.type === ServerType.Matrix) {
+    } else {
+      console.log(
+        `# clientContext - setupHomeConntection - No clientContext integration found for ${home.type}`
+      );
     }
   }
 }  

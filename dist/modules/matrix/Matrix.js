@@ -15,28 +15,14 @@ var Environments;
     Environments["prod"] = "prod";
 })(Environments || (Environments = {}));
 export default class Matrix extends Module {
-    constructor(core, config, dependencyInjection) {
+    constructor(core, config, _dependencyInjection) {
         super(core);
         this.config = config;
-        this.dependencyInjection = dependencyInjection;
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
-            const client = matrixcs.createClient(this.config.home);
-            client.login("m.login.password", { "user": "machine_sinatra", "password": "warmout" }).then((response) => {
-                console.log(response.access_token);
-            });
+            this.client = matrixcs.createClient(this.config.home);
         });
-    }
-    signIn(username, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-        });
-    }
-    createAccount(username, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-        });
-    }
-    setup() {
     }
 }
 //# sourceMappingURL=Matrix.js.map

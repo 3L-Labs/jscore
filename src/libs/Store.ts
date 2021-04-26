@@ -54,10 +54,15 @@ export default class Store {
 
     protected connectionObjects(){
         try {
-            if (this.core.modules.clientContext) {
-                this.http = this.core.modules?.clientContext.home.http;   
-                this.pubsub = this.core.modules?.clientContext.home.pubsub;
+            if (
+                !this.core.modules.clientContext || 
+                !this.core.modules.clientContext.home
+            ) {
+                return;
             }
+
+            this.http = this.core.modules?.clientContext?.home.http;   
+            this.pubsub = this.core.modules?.clientContext?.home.pubsub;
         } catch (e) {
             console.warn("Failed creating connection objects")
         }
