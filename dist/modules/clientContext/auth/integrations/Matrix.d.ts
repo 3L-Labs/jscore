@@ -1,6 +1,9 @@
 import Auth from "../Auth";
 interface MatrixTokens {
     accessToken: string;
+    device_id: string;
+    home_server: string;
+    user_id: string;
 }
 export default class Matrix extends Auth<MatrixTokens> {
     private updateAuthState;

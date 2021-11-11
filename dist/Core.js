@@ -63,17 +63,22 @@ export default class Core {
         return __awaiter(this, void 0, void 0, function* () {
             const requestedModules = this.config.modules;
             try {
+                const independentModules = [];
+                const dependentModules = [];
                 const missingModuleDepdendencies = (modules) => {
                     return Array.from(Object.keys(modules)).find(moduleName => {
                         const dependencies = modules[moduleName].dependencies;
-                        if (!dependencies)
+                        if (!dependencies) {
+                            independentModules.push(moduleName);
                             return false;
+                        }
                         return !!dependencies.find((dependency) => {
                             if (!modules[dependency.package])
                                 return true;
                             else {
                                 if (modules[dependency.package].version !== dependency.version)
                                     return true;
+                                dependentModules.push(moduleName);
                                 return false;
                             }
                         });
@@ -81,9 +86,10 @@ export default class Core {
                 };
                 if (missingModuleDepdendencies(requestedModules))
                     throw new Error("Bad Module Configuration! Missing dependencies");
+                const modules = independentModules.concat(dependentModules);
                 const loadedModules = [];
                 const errors = [];
-                Array.from(Object.keys(requestedModules)).forEach((moduleName) => {
+                modules.forEach((moduleName) => {
                     const moduleConfig = requestedModules[moduleName];
                     const Module = MapConfig[moduleName];
                     let dependencies;

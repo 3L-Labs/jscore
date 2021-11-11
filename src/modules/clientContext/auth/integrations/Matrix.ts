@@ -3,6 +3,9 @@ import Auth from "../Auth";
 
 interface MatrixTokens {
     accessToken: string;
+    device_id: string;
+    home_server: string;
+    user_id: string;
 }
 
 export default class Matrix extends Auth<MatrixTokens> {
@@ -19,13 +22,22 @@ export default class Matrix extends Auth<MatrixTokens> {
     }
 
     public async checkLocalAuth(){
-
-        return true;
+        console.log("checkign local auth!!")
+        try {
+            const accessToken = await this.matrix.client.getAccessToken()
+            if (accessToken) {
+                this.updateAuthState(AuthenticationState.SUCCESS);
+                return true;
+            }
+        } catch (e) {
+            this.updateAuthState(AuthenticationState.ERROR);
+        }
+        this.updateAuthState(AuthenticationState.UNKNOWN);
+        return false;
     }
 
     public async signIn(username: string, password: string) {
         try {
-            /*
             const response = await this.matrix.client.login(
                 "m.login.password", 
                     {
@@ -33,7 +45,9 @@ export default class Matrix extends Auth<MatrixTokens> {
                         "password": password
                     }
                 );
-            this.tokens.accessToken = response.access_token;*/
+
+            this.tokens = response;
+            window.localStorage.setItem("matrix", JSON.stringify(this.tokens));
             this.updateAuthState(AuthenticationState.SUCCESS);
         } catch (e) {
             this.updateAuthState(AuthenticationState.ERROR);

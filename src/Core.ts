@@ -95,13 +95,20 @@ export default class Core<T=any,L=any> {
       //default in case its loaded with require
       const requestedModules = this.config.modules;
 
+      // FIXME: Module dependency stuff is VERY barbones
+      // talk to sunny for more info 
+
       //Check our dependencies across our modules
       try { 
+        const independentModules: Array<String> = []
+        const dependentModules: Array<String> = []
         const missingModuleDepdendencies = (modules) => {
           return Array.from(Object.keys(modules)).find(moduleName => {
             const dependencies = modules[moduleName].dependencies;
-            if (!dependencies)
+            if (!dependencies) {
+              independentModules.push(moduleName)
               return false;
+            }
 
             return !!dependencies.find((dependency) => {
               if (!modules[dependency.package])
@@ -109,6 +116,8 @@ export default class Core<T=any,L=any> {
               else {
                 if (modules[dependency.package].version !== dependency.version) 
                   return true
+
+                dependentModules.push(moduleName) 
                 return false
               }
             })
@@ -118,11 +127,13 @@ export default class Core<T=any,L=any> {
         if (missingModuleDepdendencies(requestedModules))
           throw new Error("Bad Module Configuration! Missing dependencies");
 
+        // TODO: Load and start dependent modules first!!
+        const modules = independentModules.concat(dependentModules)
 
         //load and start all of our modules
         const loadedModules: Array<Promise<void>> = [];
         const errors: Array<any> = []
-        Array.from(Object.keys(requestedModules)).forEach((moduleName) => {
+        modules.forEach((moduleName: any) => {
 
           //Get the module from the map
           const moduleConfig = requestedModules[moduleName];

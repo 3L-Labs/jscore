@@ -18,12 +18,30 @@ export default class Matrix extends Auth {
     }
     checkLocalAuth() {
         return __awaiter(this, void 0, void 0, function* () {
-            return true;
+            console.log("checkign local auth!!");
+            try {
+                const accessToken = yield this.matrix.client.getAccessToken();
+                if (accessToken) {
+                    this.updateAuthState(AuthenticationState.SUCCESS);
+                    return true;
+                }
+            }
+            catch (e) {
+                this.updateAuthState(AuthenticationState.ERROR);
+            }
+            this.updateAuthState(AuthenticationState.UNKNOWN);
+            return false;
         });
     }
     signIn(username, password) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const response = yield this.matrix.client.login("m.login.password", {
+                    "user": username,
+                    "password": password
+                });
+                this.tokens = response;
+                window.localStorage.setItem("matrix", JSON.stringify(this.tokens));
                 this.updateAuthState(AuthenticationState.SUCCESS);
             }
             catch (e) {

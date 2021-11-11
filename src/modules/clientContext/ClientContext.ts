@@ -106,7 +106,7 @@ export default class ClientContext extends Module {
               this.config.auth.config,
               this.core.modules.matrix
             );
-          return await this.auth.checkLocalAuth();
+        return await this.auth.checkLocalAuth();
       case AuthType.None : 
         this.core.constants.authentication.update(AuthenticationState.SUCCESS)
         break;
