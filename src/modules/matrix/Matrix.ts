@@ -1,7 +1,7 @@
 import Module from "../Module";
 import Core from "../../Core";
 
-const sdk = require("./lib/browser-matrix");
+//const sdk = require("./lib/browser-matrix");
 declare var matrixcs;
 
 enum Environments {
@@ -59,16 +59,11 @@ export default class Matrix extends Module {
             this.core.modules.clientContext?.auth.checkLocalAuth()
         }
 
-        console.log("this.client: ", this.client)
-
     }
 
     async sync(){
         this.client.startClient();
         return new Promise((resolve, reject) => this.client.once('sync', (state, prevState, res) => {
-            console.log("prevState: ", prevState);
-            console.log("state: ", state);
-            console.log("res: ", res);
             this.isSynced = true;
             resolve(state);
         }));
